@@ -1,11 +1,9 @@
 ﻿#ifndef GAME_H
 #define GAME_H
 
-
-namespace game{
-  void Setup();
-  void DisplayMap();
-  void Run();
-}
+namespace Game
+{
+    void Loop();
+};
 
 #endif //GAME_H

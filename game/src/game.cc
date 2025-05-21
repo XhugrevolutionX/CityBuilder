@@ -1,40 +1,45 @@
-﻿#include "game.h"
-#include <SFML/Graphics.hpp>
+﻿#include <SFML/Graphics/RenderWindow.hpp>
+#include "resource_manager.h"
+#include "tilemap.h"
 
-namespace game
+namespace Game
 {
-  namespace
-  {
-    sf::RenderWindow          window_;
+    namespace
+    {
+        sf::RenderWindow window;
+        Tilemap tilemap;
 
-    sf::Texture               texture_("ressources/image_test.jpg");
-    std::optional<sf::Sprite> sprite_;
-  }
+        void CreateTilemap()
+        {
+            tilemap.Setup(sf::Vector2u(window.getSize().x / tilemap.SpritSize().x, window.getSize().y / tilemap.SpritSize().y));
 
-  void Setup()
-  {
-    sprite_ = sf::Sprite(texture_);
-    window_.create(sf::VideoMode(sf::Vector2u(sprite_->getGlobalBounds().size.x, sprite_->getGlobalBounds().size.y)), "SFML works!");
-  }
+            tilemap.SetTiles();
+        }
 
-  void UpdateMap()
-  {
-    window_.clear();
-    window_.draw(*sprite_);
-    window_.display();
-  }
-  
-  void Run()
-  {
-    Setup();
+        void Setup()
+        {
+            window.create(sf::VideoMode({1600, 800}), "CityBuilder");
+            ResourceManager::Setup();
+            CreateTilemap();
+        }
+    } // namespace
 
-    while(window_.isOpen()) {
-      while(const std::optional event = window_.pollEvent())
-      {
-        if(event->is<sf::Event::Closed>()) window_.close();
-      }
+    void Loop()
+    {
+        Setup();
+        while(window.isOpen())
+        {
+            while(const std::optional event = window.pollEvent())
+            {
+                if(event->is<sf::Event::Closed>())
+                {
+                    window.close();
+                }
+            }
 
-      UpdateMap();
+            window.clear();
+            window.draw(tilemap);
+            window.display();
+        }
     }
-  }
-}
+} // namespace game
