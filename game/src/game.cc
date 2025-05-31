@@ -1,5 +1,5 @@
 ﻿#include <SFML/Graphics/RenderWindow.hpp>
-#include "resource_manager.h"
+#include "../../api/include/resource_manager.h"
 #include "tilemap.h"
 
 namespace Game

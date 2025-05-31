@@ -17,6 +17,7 @@ endif(ENABLE_TESTING)
 
 add_subdirectory(game/)
 add_subdirectory(core/)
+add_subdirectory(api/)
 
 file(COPY ${CMAKE_SOURCE_DIR}/ressources DESTINATION ${CMAKE_BINARY_DIR})
 
