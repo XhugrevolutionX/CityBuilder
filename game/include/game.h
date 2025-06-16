@@ -1,9 +1,9 @@
 ﻿#ifndef GAME_H
 #define GAME_H
 
-namespace Game
-{
+namespace game {
     void Loop();
 };
+
 
 #endif //GAME_H

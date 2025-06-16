@@ -1,6 +1,4 @@
-﻿#include <algorithm>
-
-#include "gtest/gtest.h"
+﻿#include "gtest/gtest.h"
 #include "maths/vec2f.h"
 
 TEST(Vec2f, EMPTY)
@@ -14,8 +12,6 @@ TEST(Vec2f, Add)
 {
     constexpr float x1 = 1, x2 = 2;
     constexpr float y1 = 3, y2 = -4;
-
-    core::Vec2f v = {x1, x2};
 
     constexpr core::Vec2f v1{x1,x2};
     constexpr core::Vec2f v2{y1,y2};

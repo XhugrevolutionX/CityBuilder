@@ -1,5 +1,5 @@
 ﻿//
-// Created by hugze on 21.05.2025.
+// Created by sebas on 20/05/2025.
 //
 
 #ifndef EMPTY_H

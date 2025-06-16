@@ -1,45 +1,56 @@
-﻿#include <SFML/Graphics/RenderWindow.hpp>
-#include "../../api/include/resource_manager.h"
-#include "tilemap.h"
+﻿#include "game.h"
 
-namespace Game
-{
-    namespace
-    {
-        sf::RenderWindow window;
-        Tilemap tilemap;
+#include "SFML/Graphics.hpp"
 
-        void CreateTilemap()
-        {
-            tilemap.Setup(sf::Vector2u(window.getSize().x / tilemap.SpritSize().x, window.getSize().y / tilemap.SpritSize().y));
+#include "ai/npc.h"
+#include "graphics/tilemap.h"
 
-            tilemap.SetTiles();
+namespace game {
+    namespace {
+        sf::Clock clock;
+
+        sf::RenderWindow window_;
+        TileMap tilemap_;
+
+        api::ai::Npc npc_;
+
+        void Setup(){
+            // Create the main window
+            window_.create(sf::VideoMode({1280, 1080}), "SFML window");
+
+            tilemap_.Setup();
+
+            npc_.Setup(&tilemap_);
+
         }
+    }
 
-        void Setup()
-        {
-            window.create(sf::VideoMode({1600, 800}), "CityBuilder");
-            ResourceManager::Setup();
-            CreateTilemap();
-        }
-    } // namespace
-
-    void Loop()
-    {
+    void Loop(){
         Setup();
-        while(window.isOpen())
-        {
-            while(const std::optional event = window.pollEvent())
-            {
-                if(event->is<sf::Event::Closed>())
-                {
-                    window.close();
+
+        // Start the game loop
+        while (window_.isOpen()) {
+
+            auto dt = clock.restart().asSeconds();
+
+            // Process events = Input frame
+            while (const std::optional event = window_.pollEvent()) {
+                // Close window: exit
+                if (event->is<sf::Event::Closed>()) {
+                    window_.close();
                 }
             }
 
-            window.clear();
-            window.draw(tilemap);
-            window.display();
+            // GamePlay, physic frame
+            npc_.Update(dt);
+
+            // Graphic frame
+            window_.clear();
+
+            tilemap_.Draw(window_);
+            npc_.Draw(window_);
+
+            window_.display();
         }
     }
-} // namespace game
+}
