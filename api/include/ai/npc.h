@@ -21,7 +21,7 @@ namespace api::ai {
             kLength
         };
 
-        std::string_view files[static_cast<size_t>(Animation::kLength)]{"empty.png", "npc_blue.png"};
+        std::string_view files[static_cast<size_t>(Animation::kLength)]{"empty.png", "character.png"};
         core::experimental::AssetManager<sf::Texture, Animation, "_assets/sprites"> textures;
 
         // Behaviour tree
@@ -55,9 +55,11 @@ namespace api::ai {
         bool resourceAvailable_ = true;
         bool target_reachable_ = true;
         float target_distance_ = 20;
+        float path_index_ = 0;
 
         // Motion
         void SetPath(const Path& path);
+        void SetNextPath();
 
     };
 }

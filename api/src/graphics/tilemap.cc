@@ -16,11 +16,6 @@ TileMap::TileMap(){
 void TileMap::Setup(){
     textures.Load(files);
 
-
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(0, 49);
-
     noise::module::Perlin perlin;
 
     perlin.SetSeed(150);             // Set seed for reproducibility
@@ -41,13 +36,8 @@ void TileMap::Setup(){
 
         int idx = (j) + ((i) * kWidth/kPixelStep);
         if (value < perlinThreshold) {
-          if (dis(gen) == 0) {
-            //replace 1 in 50 grass tiles with a house
-            tiles_[idx] = Tile::kMaison;
-          }
-          else {
-            tiles_[idx] = Tile::kGrass16;
-          }
+          tiles_[idx] = Tile::kGrass;
+
           walkables_.push_back(ScreenPosition(idx));
         }
         else {
@@ -55,6 +45,41 @@ void TileMap::Setup(){
         }
       }
     }
+
+     perlin.SetSeed(50);             // Set seed for reproducibility
+     perlin.SetFrequency(5);        // Controls the "zoom" level
+     perlin.SetPersistence(0.3);      // Amplitude of successive octaves
+     perlin.SetLacunarity(2);       // Frequency multiplier between octaves
+     perlin.SetOctaveCount(3);        // Number of octaves (layers of detail)
+     perlin.SetNoiseQuality(noise::QUALITY_STD); // QUALITY_FAST, QUALITY_STD, or QUALITY_BEST
+
+
+    for (auto element : walkables_) {
+
+       int i = element.x / kPixelStep;
+       int j = element.y / kPixelStep;
+
+       double xi = static_cast<double>(j) / 100;
+       double xj = static_cast<double>(i) / 100;
+
+       double raw = perlin.GetValue(xi, xj, 0.0);
+       double value = (raw + 1.0) / 2.0;
+
+       int idx = (i) + ((j) * kWidth/kPixelStep);
+
+       if (idx == 0 || idx == 10 || idx == 310 || idx == 300) {
+         ressources_[idx] = Tile::kMaison;
+       }
+       else {
+         if (value < perlinThreshold) {
+           ressources_[idx] = Tile::kTree;
+         }
+         else {
+           ressources_[idx] = Tile::kEmpty;
+         }
+       }
+    }
+
 }
 
 void TileMap::Draw(sf::RenderWindow &window){
@@ -64,15 +89,20 @@ void TileMap::Draw(sf::RenderWindow &window){
 
     for (auto tile: tiles_) {
         sprite.setPosition(ScreenPosition(tileIndex));
-
-        //puts grass underneath the houses
-        if (tile == Tile::kMaison) {
-          sprite.setTexture(textures.Get(Tile::kGrass16));
-          window.draw(sprite);
-        }
         sprite.setTexture(textures.Get(tile));
         window.draw(sprite);
 
+        tileIndex++;
+    }
+
+    tileIndex = 0;
+
+    for (auto tile: ressources_) {
+      if (!(tile == Tile::kEmpty)) {
+          sprite.setPosition(ScreenPosition(tileIndex));
+          sprite.setTexture(textures.Get(tile));
+          window.draw(sprite);
+      }
         tileIndex++;
     }
 }
@@ -94,3 +124,18 @@ int TileMap::Index(const sf::Vector2f screenPosition){
     return static_cast<int>(ceil(screenPosition.y / kPixelStep * kWidth)) +
            static_cast<int>(ceil(screenPosition.x / kPixelStep));
 }
+
+std::vector<sf::Vector2f> TileMap::GetHouses() const {
+  std::vector<sf::Vector2f> houses;
+  int tileIndex = 0;
+  for (auto element : ressources_) {
+    if (element == Tile::kMaison) {
+      houses.emplace_back(ScreenPosition(tileIndex));
+    }
+    tileIndex++;
+  }
+  if (houses.empty()) {
+    return std::vector<sf::Vector2f>();
+  }
+  return houses;
+};

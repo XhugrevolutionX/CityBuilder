@@ -2,9 +2,8 @@
 #define ASSET_MANAGER_H
 
 #include <span>
-#include <string>
-#include <vector>
 #include <array>
+#include <algorithm>
 
 namespace core::experimental {
 

@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include <SFML/Graphics.hpp>
+
 #include "ai/bt_sequence.h"
 #include "ai/bt_selector.h"
 #include "ai/bt_action.h"
@@ -83,18 +85,18 @@ void Npc::Setup(const TileMap* tileMap){
 
     tileMap_ = tileMap;
 
-    Path path = ::motion::Astar::GetPath({0,0}, {256, 256}, tileMap_->GetWalkables());
-    SetPath(path);
-
+    SetNextPath();
 }
 
 void Npc::Update(float dt){
-    // -------------------
     if (path_.IsValid()){
         motor_.Update(dt);
         if (!path_.IsDone() && motor_.RemainingDistance() <= 0.001f) {
             motor_.SetDestination(path_.GetNextPoint());
         }
+      else if (path_.IsDone()) {
+        SetNextPath();
+      }
     }
 }
 
@@ -107,4 +109,16 @@ void Npc::Draw(sf::RenderWindow &window){
 void Npc::SetPath(const Path& path){
     path_ = path;
     motor_.SetDestination(path_.StartPoint());
+}
+
+void Npc::SetNextPath(){
+  Path path;
+  if (path_index_ < tileMap_->GetHouses().size() - 1) {
+    path = ::motion::Astar::GetPath(tileMap_->GetHouses().at(path_index_), tileMap_->GetHouses().at(path_index_ + 1), tileMap_->GetWalkables());
+    path_index_++;
+  } else {
+    path = ::motion::Astar::GetPath(tileMap_->GetHouses().at(path_index_), tileMap_->GetHouses().at(0), tileMap_->GetWalkables());
+    path_index_ = 0;
+  }
+  SetPath(path);
 }

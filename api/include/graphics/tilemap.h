@@ -14,20 +14,20 @@ using core::experimental::AssetManager;
 class TileMap {
     enum class Tile {
         kEmpty,
-        kGrass16,
-        kBgA,
-        kBgB,
-        kMaison,
+        kGrass,
         kWater,
+        kMaison,
+        kRock,
+        kTree,
         kLength
     };
     std::string_view files[static_cast<size_t>(Tile::kLength)] {
-        "empty.png", "grass.png", "bg_tile_a.png", "bg_tile_b.png", "maison.png",
-        "water.png"
+        "empty.png", "grass.png", "water.png", "maison.png", "rock.png", "tree.png"
     };
 
 private:
     std::array<Tile, kWidth/kPixelStep * kHeight/kPixelStep> tiles_ = {};
+    std::array<Tile, kWidth/kPixelStep * kHeight/kPixelStep> ressources_ = {};
     AssetManager<sf::Texture, Tile, "_assets/sprites"> textures;
 
     static sf::Vector2f ScreenPosition(int index);
@@ -41,5 +41,6 @@ public:
     void Draw(sf::RenderWindow &window);
 
     std::vector<sf::Vector2f> GetWalkables() const;
+    std::vector<sf::Vector2f> GetHouses() const;
 };
 #endif
