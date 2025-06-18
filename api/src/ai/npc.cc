@@ -16,20 +16,18 @@ Status Npc::Move(){
     if (!target_reachable_) {
         std::cout << "Not reachable" << target_reachable_ << std::endl;
         return Status::kFailure;
-    } else {
-        std::cout << "I'm moving (distance = " << target_distance_ << ")" << std::endl;
-        if (target_distance_ >= 0.15f) {
+    }
+        if (!path_.IsDone()) {
+          std::cout << "Move" << std::endl;
             // still arriving, return running
-            target_distance_ -= kMovingSpeed;
             return Status::kRunning;
-        } else {
+        }
             // if destination reached, return success
             return Status::kSuccess;
-        }
     }
-}
 
 Status Npc::Eat(){
+    std::cout << "I'm eating" << std::endl;
     // No failure, until we have food storage system
     hunger_ -= kHungerRate;
     if (hunger_ > 0) {
@@ -44,6 +42,7 @@ void Npc::SetupBehaviourTree(){
     feedSequence->AddChild(std::make_unique<Action>([this]() {
         if (hunger_ >= 100) {
             std::cout << "I'm hungry, wanna eat........" << std::endl;
+            SetNextPath();
             return Status::kSuccess;
         } else {
             std::cout << "I'm not hungry, thanks........" << std::endl;
@@ -84,19 +83,15 @@ void Npc::Setup(const TileMap* tileMap){
     motor_.SetSpeed(kMovingSpeed);
 
     tileMap_ = tileMap;
-
-    SetNextPath();
 }
 
 void Npc::Update(float dt){
+    root_->Tick();
     if (path_.IsValid()){
         motor_.Update(dt);
         if (!path_.IsDone() && motor_.RemainingDistance() <= 0.001f) {
             motor_.SetDestination(path_.GetNextPoint());
         }
-      else if (path_.IsDone()) {
-        SetNextPath();
-      }
     }
 }
 

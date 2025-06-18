@@ -27,7 +27,7 @@ namespace api::ai {
         // Behaviour tree
         std::unique_ptr<Node> root_;
         // Behaviour Constants
-        static constexpr float kHungerRate = 0.1f;
+        static constexpr float kHungerRate = 0.5f;
         static constexpr float kMovingSpeed = 50.0f;
 
         // Motion
@@ -55,6 +55,8 @@ namespace api::ai {
         bool resourceAvailable_ = true;
         bool target_reachable_ = true;
         float target_distance_ = 20;
+
+
         float path_index_ = 0;
 
         // Motion

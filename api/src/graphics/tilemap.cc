@@ -46,21 +46,20 @@ void TileMap::Setup(){
       }
     }
 
-     perlin.SetSeed(50);             // Set seed for reproducibility
-     perlin.SetFrequency(5);        // Controls the "zoom" level
-     perlin.SetPersistence(0.3);      // Amplitude of successive octaves
-     perlin.SetLacunarity(2);       // Frequency multiplier between octaves
-     perlin.SetOctaveCount(3);        // Number of octaves (layers of detail)
-     perlin.SetNoiseQuality(noise::QUALITY_STD); // QUALITY_FAST, QUALITY_STD, or QUALITY_BEST
-
+   perlin.SetSeed(50);             // Set seed for reproducibility
+   perlin.SetFrequency(5);        // Controls the "zoom" level
+   perlin.SetPersistence(0.3);      // Amplitude of successive octaves
+   perlin.SetLacunarity(2);       // Frequency multiplier between octaves
+   perlin.SetOctaveCount(3);        // Number of octaves (layers of detail)
+   perlin.SetNoiseQuality(noise::QUALITY_STD); // QUALITY_FAST, QUALITY_STD, or QUALITY_BEST
 
     for (auto element : walkables_) {
 
        int i = element.x / kPixelStep;
        int j = element.y / kPixelStep;
 
-       double xi = static_cast<double>(j) / 100;
-       double xj = static_cast<double>(i) / 100;
+       double xi = static_cast<double>(i) / 100;
+       double xj = static_cast<double>(j) / 100;
 
        double raw = perlin.GetValue(xi, xj, 0.0);
        double value = (raw + 1.0) / 2.0;
@@ -71,7 +70,10 @@ void TileMap::Setup(){
          ressources_[idx] = Tile::kMaison;
        }
        else {
-         if (value < perlinThreshold) {
+         if (value < perlinThreshold / 1.5) {
+           ressources_[idx] = Tile::kRock;
+         }
+         else if (value < perlinThreshold) {
            ressources_[idx] = Tile::kTree;
          }
          else {
