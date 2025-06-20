@@ -13,7 +13,7 @@ using namespace api::ai;
 
 Status Npc::Move(){
     // if destination not reachable, return failure
-    if (!target_reachable_) {
+    if (!path_.IsValid()) {
         std::cout << "Not reachable" << target_reachable_ << std::endl;
         return Status::kFailure;
     }
@@ -33,43 +33,49 @@ Status Npc::Eat(){
     if (hunger_ > 0) {
         return Status::kRunning;
     } else {
+        SetNextPath();
         return Status::kSuccess;
     }
 }
 
+Status Npc::HungerBuild() {
+    if (hunger_ >= 100) {
+      std::cout << "I'm hungry, wanna eat........" << std::endl;
+      return Status::kSuccess;
+    } else {
+      std::cout << "I'm not hungry, thanks........" << std::endl;
+      return Status::kFailure;
+    }
+};
+
+Status Npc::Work() {
+  hunger_ += kHungerRate * 2;
+  if (resourceAvailable_) {
+    std::cout << "Resource Available, working....." << std::endl;
+    return Status::kSuccess;
+  }
+  return Status::kFailure;
+};
+
+Status Npc::Sleep() {
+
+  hunger_ += kHungerRate;
+  std::cout << "I'm sleeping" << std::endl;
+  return Status::kSuccess;
+};
+
 void Npc::SetupBehaviourTree(){
     auto feedSequence = std::make_unique<Sequence>();
-    feedSequence->AddChild(std::make_unique<Action>([this]() {
-        if (hunger_ >= 100) {
-            std::cout << "I'm hungry, wanna eat........" << std::endl;
-            SetNextPath();
-            return Status::kSuccess;
-        } else {
-            std::cout << "I'm not hungry, thanks........" << std::endl;
-            return Status::kFailure;
-        }
-    }));
-    feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::Move, this)));
+
+    feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::HungerBuild, this)));
     feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::Eat, this)));
+    feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::Move, this)));
 
     auto selector = std::make_unique<Selector>();
     // Attach the sequence to the selector
     selector->AddChild(std::move(feedSequence));
-    // Work sequence
-    selector->AddChild(std::make_unique<Action>([this]() {
-        hunger_ += kHungerRate * 5;
-        if (resourceAvailable_) {
-            std::cout << "Resource Available, working....." << std::endl;
-            return Status::kSuccess;
-        }
-        return Status::kFailure;
-    }));
-    // Idle sequence
-    selector->AddChild(std::make_unique<Action>([this]() {
-        hunger_ += kHungerRate * 5;
-        std::cout << "I'm sleeping" << std::endl;
-        return Status::kSuccess;
-    }));
+    selector->AddChild(std::make_unique<Action>(std::bind(&Npc::Work, this)));
+    selector->AddChild(std::make_unique<Action>(std::bind(&Npc::Sleep, this)));
 
     root_ = std::move(selector);
 }

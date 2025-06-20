@@ -45,12 +45,14 @@ namespace api::ai {
 
         // Actions
         Status Move();
+        Status HungerBuild();
         Status Eat();
+        Status Work();
+        Status Sleep();
 
         void SetupBehaviourTree();
 
         // Behaviours
-        //bool hungry_ = false;
         float hunger_ = 0;
         bool resourceAvailable_ = true;
         bool target_reachable_ = true;

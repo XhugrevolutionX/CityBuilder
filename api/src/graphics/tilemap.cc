@@ -66,7 +66,7 @@ void TileMap::Setup(){
 
        int idx = (i) + ((j) * kWidth/kPixelStep);
 
-       if (idx == 0 || idx == 10 || idx == 310 || idx == 300) {
+       if (idx == 0 || idx == 10 || idx == 510 || idx == 500) {
          ressources_[idx] = Tile::kMaison;
        }
        else {
