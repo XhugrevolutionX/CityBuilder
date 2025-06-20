@@ -8,7 +8,7 @@
 
 namespace motion {
     namespace Astar {
-        api::motion::Path GetPath(sf::Vector2f start, sf::Vector2f end, std::vector<sf::Vector2f> walkableTiles);
+        api::motion::Path GetPath(const int gridStep, sf::Vector2f start, sf::Vector2f end, std::vector<sf::Vector2f> walkableTiles);
     }
 }
 

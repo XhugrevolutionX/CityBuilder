@@ -40,12 +40,16 @@ namespace motion::Astar {
         return (p2 - p1).length();
     }
 
-    std::array<sf::Vector2f, 4> neighbours = {
-        sf::Vector2f(0, 16),
-        sf::Vector2f(16, 0),
-        sf::Vector2f(0, -16),
-        sf::Vector2f(-16, 0)
-    };
+    std::array<sf::Vector2f, 4> neighbours(int gridStep = 16){
+      std::array<sf::Vector2f, 4> neighbours = {
+        sf::Vector2f(0, gridStep),
+        sf::Vector2f(gridStep, 0),
+        sf::Vector2f(0, -gridStep),
+        sf::Vector2f(-gridStep, 0)
+      };
+
+      return neighbours;
+    }
 
     Path ReconstitutePath(aStarNode &start_node){
         Path path;
@@ -64,7 +68,7 @@ namespace motion::Astar {
         return path;
     }
 
-    Path GetPath(sf::Vector2f start, sf::Vector2f end, std::vector<sf::Vector2f> walkableTiles){
+    Path GetPath(const int gridStep, sf::Vector2f start, sf::Vector2f end, std::vector<sf::Vector2f> walkableTiles){
         Path aStarPath;
 
         // Are start / end point in walkables tiles ?
@@ -97,7 +101,7 @@ namespace motion::Astar {
                 return ReconstitutePath(currentNode);
             }
 
-            for (auto neighbour: neighbours) {
+            for (auto neighbour: neighbours(gridStep)) {
                 sf::Vector2f newPosition = currentNode.position + neighbour;
 
                 auto f = std::find(walkableTiles.begin(), walkableTiles.end(), newPosition);

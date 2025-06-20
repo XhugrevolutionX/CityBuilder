@@ -1,6 +1,7 @@
 ﻿#include "ai/npc.h"
 
 #include <iostream>
+#include <random>
 
 #include <SFML/Graphics.hpp>
 
@@ -33,7 +34,7 @@ Status Npc::Eat(){
     if (hunger_ > 0) {
         return Status::kRunning;
     } else {
-        SetNextPath();
+        //SetNextPath();
         return Status::kSuccess;
     }
 }
@@ -80,8 +81,14 @@ void Npc::SetupBehaviourTree(){
     root_ = std::move(selector);
 }
 
-void Npc::Setup(const TileMap* tileMap){
-    textures.Load(files);
+void Npc::Setup(std::string_view filename, const TileMap* tileMap){
+
+    if(!texture_.loadFromFile("_assets/sprites/" + std::string(filename))) {
+      std::cout << "Error loading texture " << filename << std::endl;
+      if (!texture_.loadFromFile("_assets/sprites/empty.png")) {
+        std::cout << "Error loading texture empty.png" << std::endl;
+      }
+    }
 
     SetupBehaviourTree();
 
@@ -89,6 +96,14 @@ void Npc::Setup(const TileMap* tileMap){
     motor_.SetSpeed(kMovingSpeed);
 
     tileMap_ = tileMap;
+
+    static std::mt19937 gen{std::random_device{}()};
+    static std::uniform_int_distribution<size_t> dist(0, tileMap_->GetWalkables().size() - 1);
+
+    sf::Vector2f end = tileMap_->GetWalkables().at(dist(gen));
+
+    Path path = ::motion::Astar::GetPath(16, motor_.GetPosition(), end, tileMap_->GetWalkables());
+    SetPath(path);
 }
 
 void Npc::Update(float dt){
@@ -102,7 +117,7 @@ void Npc::Update(float dt){
 }
 
 void Npc::Draw(sf::RenderWindow &window){
-    sf::Sprite sprite(textures.Get(Animation::KBlue));
+    sf::Sprite sprite(texture_);
     sprite.setPosition(motor_.GetPosition());
     window.draw(sprite);
 }
@@ -115,10 +130,10 @@ void Npc::SetPath(const Path& path){
 void Npc::SetNextPath(){
   Path path;
   if (path_index_ < tileMap_->GetHouses().size() - 1) {
-    path = ::motion::Astar::GetPath(tileMap_->GetHouses().at(path_index_), tileMap_->GetHouses().at(path_index_ + 1), tileMap_->GetWalkables());
+    path = ::motion::Astar::GetPath(16,tileMap_->GetHouses().at(path_index_), tileMap_->GetHouses().at(path_index_ + 1), tileMap_->GetWalkables());
     path_index_++;
   } else {
-    path = ::motion::Astar::GetPath(tileMap_->GetHouses().at(path_index_), tileMap_->GetHouses().at(0), tileMap_->GetWalkables());
+    path = ::motion::Astar::GetPath(16,tileMap_->GetHouses().at(path_index_), tileMap_->GetHouses().at(0), tileMap_->GetWalkables());
     path_index_ = 0;
   }
   SetPath(path);
