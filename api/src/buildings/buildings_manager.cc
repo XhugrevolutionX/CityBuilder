@@ -10,8 +10,8 @@
 
 namespace api::buildings {
 
-void BuildingsManager::Add(BuildingsType type, BuildingsColor color, sf::Vector2f position, TileMap* tilemap){
-  CreateBuilding(buildings_, type, color, position, tilemap);
+void BuildingsManager::Add(BuildingsType type, sf::Vector2f position, TileMap* tilemap){
+  CreateBuilding(buildings_, type, position, tilemap);
 }
 
 void BuildingsManager::Update(float dt){

@@ -9,16 +9,10 @@
 
 namespace api::buildings{
 
-enum class BuildingsColor {
-  kCyan,
-  kRed,
-  kLime,
-  kPurple
-};
-
 enum class BuildingsType {
   kMine,
-  kLumber
+  kLumber,
+  kWindmill
 };
 
 class BuildingsManager {
@@ -26,7 +20,7 @@ class BuildingsManager {
   std::vector<Building> buildings_;
 
 public:
-  void Add(BuildingsType type, BuildingsColor color, sf::Vector2f position, TileMap* tilemap);
+  void Add(BuildingsType type, sf::Vector2f position, TileMap* tilemap);
   void Update(float dt);
   void Draw(sf::RenderWindow &window);
 

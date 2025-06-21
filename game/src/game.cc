@@ -17,10 +17,10 @@ namespace game {
         api::buildings::BuildingsManager buildings_manager_;
 
         void Setup(){
-            // Create the main window
-            window_.create(sf::VideoMode({1280, 1080}), "SFML window");
+          // Create the main window
+          window_.create(sf::VideoMode({1280, 1080}), "SFML window");
 
-            tilemap_.Setup();
+          tilemap_.Setup();
 
           npc_manager_.Add(api::ai::NpcType::kCyan, &tilemap_);
           npc_manager_.Add(api::ai::NpcType::kRed, &tilemap_);
@@ -28,15 +28,9 @@ namespace game {
           npc_manager_.Add(api::ai::NpcType::kPurple, &tilemap_);
 
 
-           buildings_manager_.Add(api::buildings::BuildingsType::kLumber, api::buildings::BuildingsColor::kCyan, {0,96}, &tilemap_);
-           buildings_manager_.Add(api::buildings::BuildingsType::kLumber, api::buildings::BuildingsColor::kRed, {16,96}, &tilemap_);
-           buildings_manager_.Add(api::buildings::BuildingsType::kLumber, api::buildings::BuildingsColor::kLime, {32,96}, &tilemap_);
-           buildings_manager_.Add(api::buildings::BuildingsType::kLumber, api::buildings::BuildingsColor::kPurple, {48,96}, &tilemap_);
-
-           buildings_manager_.Add(api::buildings::BuildingsType::kMine, api::buildings::BuildingsColor::kCyan, {0,112}, &tilemap_);
-           buildings_manager_.Add(api::buildings::BuildingsType::kMine, api::buildings::BuildingsColor::kRed, {16,112}, &tilemap_);
-           buildings_manager_.Add(api::buildings::BuildingsType::kMine, api::buildings::BuildingsColor::kLime, {32,112}, &tilemap_);
-           buildings_manager_.Add(api::buildings::BuildingsType::kMine, api::buildings::BuildingsColor::kPurple, {48,112}, &tilemap_);
+          buildings_manager_.Add(api::buildings::BuildingsType::kLumber, {0,96}, &tilemap_);
+          buildings_manager_.Add(api::buildings::BuildingsType::kMine, {16,96}, &tilemap_);
+          buildings_manager_.Add(api::buildings::BuildingsType::kWindmill, {32,96}, &tilemap_);
         }
     }
 
