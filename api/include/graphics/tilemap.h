@@ -2,6 +2,7 @@
 #define API_GRAPHICS_TILEMAP_H
 
 #include <SFML/Graphics.hpp>
+
 #include "assets/asset_manager.h"
 
 constexpr int kWidth = 1600;
@@ -28,6 +29,7 @@ class TileMap {
 private:
     std::array<Tile, kWidth/kPixelStep * kHeight/kPixelStep> tiles_ = {};
     std::array<Tile, kWidth/kPixelStep * kHeight/kPixelStep> ressources_ = {};
+    std::array<Tile, kWidth/kPixelStep * kHeight/kPixelStep> buildings_ = {};
     AssetManager<sf::Texture, Tile, "_assets/sprites"> textures;
 
     static sf::Vector2f ScreenPosition(int index);
@@ -39,6 +41,8 @@ public:
     explicit TileMap();
     void Setup();
     void Draw(sf::RenderWindow &window);
+
+    void AddBuilding(sf::Vector2f position);
 
     std::vector<sf::Vector2f> GetWalkables() const;
     std::vector<sf::Vector2f> GetHouses() const;

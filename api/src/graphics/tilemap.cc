@@ -7,8 +7,9 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
-#include <iostream>
 #include <random>
+
+#include "buildings/buildings_manager.h"
 
 TileMap::TileMap(){
 }
@@ -66,48 +67,43 @@ void TileMap::Setup(){
 
        int idx = (i) + ((j) * kWidth/kPixelStep);
 
-       if (idx == 0 || idx == 10 || idx == 510 || idx == 500) {
-         ressources_[idx] = Tile::kMaison;
+       if (value < perlinThreshold / 1.5) {
+         ressources_[idx] = Tile::kRock;
+       }
+       else if (value < perlinThreshold) {
+         ressources_[idx] = Tile::kTree;
        }
        else {
-         if (value < perlinThreshold / 1.5) {
-           ressources_[idx] = Tile::kRock;
-         }
-         else if (value < perlinThreshold) {
-           ressources_[idx] = Tile::kTree;
-         }
-         else {
-           ressources_[idx] = Tile::kEmpty;
-         }
+         ressources_[idx] = Tile::kEmpty;
        }
     }
-
 }
 
-void TileMap::Draw(sf::RenderWindow &window){
-    int tileIndex = 0;
+void TileMap::Draw(sf::RenderWindow &window) {
+  int tileIndex = 0;
 
-    sf::Sprite sprite(textures.Get(Tile::kEmpty));
+  sf::Sprite sprite(textures.Get(Tile::kEmpty));
 
-    for (auto tile: tiles_) {
-        sprite.setPosition(ScreenPosition(tileIndex));
-        sprite.setTexture(textures.Get(tile));
-        window.draw(sprite);
+  for (auto tile : tiles_) {
+    sprite.setPosition(ScreenPosition(tileIndex));
+    sprite.setTexture(textures.Get(tile));
+    window.draw(sprite);
 
-        tileIndex++;
+    tileIndex++;
+  }
+
+  tileIndex = 0;
+
+  for (auto tile : ressources_) {
+    if (!(tile == Tile::kEmpty)) {
+      sprite.setPosition(ScreenPosition(tileIndex));
+      sprite.setTexture(textures.Get(tile));
+      window.draw(sprite);
     }
-
-    tileIndex = 0;
-
-    for (auto tile: ressources_) {
-      if (!(tile == Tile::kEmpty)) {
-          sprite.setPosition(ScreenPosition(tileIndex));
-          sprite.setTexture(textures.Get(tile));
-          window.draw(sprite);
-      }
-        tileIndex++;
-    }
+    tileIndex++;
+  }
 }
+
 
 std::vector<sf::Vector2f> TileMap::GetWalkables() const{
     return walkables_;
@@ -123,7 +119,7 @@ sf::Vector2f TileMap::ScreenPosition(const int index){
 }
 
 int TileMap::Index(const sf::Vector2f screenPosition){
-    return static_cast<int>(ceil(screenPosition.y / kPixelStep * kWidth)) +
+    return static_cast<int>(ceil(screenPosition.y / kPixelStep * kWidth / kPixelStep)) +
            static_cast<int>(ceil(screenPosition.x / kPixelStep));
 }
 
@@ -140,4 +136,9 @@ std::vector<sf::Vector2f> TileMap::GetHouses() const {
     return std::vector<sf::Vector2f>();
   }
   return houses;
+};
+
+
+void TileMap::AddBuilding(sf::Vector2f position){
+  buildings_[Index(position)] = Tile::kMaison;
 };
