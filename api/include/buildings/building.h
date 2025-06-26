@@ -22,6 +22,8 @@ public:
 
   void Draw(sf::RenderWindow &window);
 
+  sf::Texture& GetTexture() { return texture_; }
+
 };}
 
 

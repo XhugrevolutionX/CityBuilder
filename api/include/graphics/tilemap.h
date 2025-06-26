@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "assets/asset_manager.h"
+#include "ui/clickable.h"
 
 constexpr int kWidth = 1600;
 constexpr int kHeight = 1280;
@@ -12,7 +13,7 @@ constexpr double perlinThreshold = 0.7;
 
 using core::experimental::AssetManager;
 
-class TileMap {
+class TileMap : public api::ui::Clickable{
     enum class Tile {
         kEmpty,
         kGrass,
@@ -38,7 +39,9 @@ private:
     std::vector<sf::Vector2f> walkables_;
 
 public:
-    explicit TileMap();
+
+    static sf::Vector2f TilePos(sf::Vector2i);
+
     void Setup();
     void Draw(sf::RenderWindow &window);
 

@@ -13,7 +13,7 @@ namespace api::ai{
         kCyan,
         kRed,
         kLime,
-        kPurple
+        kPurple,
     };
 
     class NpcManager {

@@ -11,9 +11,6 @@
 
 #include "buildings/buildings_manager.h"
 
-TileMap::TileMap(){
-}
-
 void TileMap::Setup(){
     textures.Load(files);
 
@@ -77,12 +74,17 @@ void TileMap::Setup(){
          ressources_[idx] = Tile::kEmpty;
        }
     }
+
+
+  SetZone(sf::IntRect({0, 0}, sf::Vector2i(kWidth, kHeight)));
 }
 
 void TileMap::Draw(sf::RenderWindow &window) {
   int tileIndex = 0;
 
   sf::Sprite sprite(textures.Get(Tile::kEmpty));
+
+  sprite.setTextureRect(sf::IntRect({0, 0}, {kPixelStep, kPixelStep}));
 
   for (auto tile : tiles_) {
     sprite.setPosition(ScreenPosition(tileIndex));
@@ -122,6 +124,14 @@ int TileMap::Index(const sf::Vector2f screenPosition){
     return static_cast<int>(ceil(screenPosition.y / kPixelStep * kWidth / kPixelStep)) +
            static_cast<int>(ceil(screenPosition.x / kPixelStep));
 }
+
+sf::Vector2f TileMap::TilePos(sf::Vector2i pos) {
+
+  return {static_cast<float>(ceil(pos.x / kPixelStep) * kPixelStep),
+          static_cast<float>(ceil(pos.y / kPixelStep) * kPixelStep)};
+
+}
+
 
 std::vector<sf::Vector2f> TileMap::GetHouses() const {
   std::vector<sf::Vector2f> houses;

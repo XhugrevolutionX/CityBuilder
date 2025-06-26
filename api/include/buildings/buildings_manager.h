@@ -12,7 +12,8 @@ namespace api::buildings{
 enum class BuildingsType {
   kMine,
   kLumber,
-  kWindmill
+  kWindmill,
+  kNone
 };
 
 class BuildingsManager {
@@ -24,6 +25,7 @@ public:
   void Update(float dt);
   void Draw(sf::RenderWindow &window);
 
+  std::vector<Building>& GetBuildings(){ return buildings_; }
 };
 }
 
