@@ -6,6 +6,7 @@
 #define NPC_MANAGER_H
 
 #include "ai/npc.h"
+#include "ressources/ressource_manager.h"
 
 namespace api::ai{
 
@@ -21,7 +22,7 @@ namespace api::ai{
         std::vector<Npc> npcs_;
 
     public:
-        void Add(NpcType type, const TileMap* tilemap);
+        void Add(NpcType type, sf::Vector2f start_position, TileMap* tilemap, RessourceManager& ressource_manager);
         void Update(float dt);
         void Draw(sf::RenderWindow &window);
 

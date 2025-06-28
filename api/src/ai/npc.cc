@@ -3,138 +3,54 @@
 #include <iostream>
 #include <random>
 
-#include <SFML/Graphics.hpp>
-
-#include "ai/bt_sequence.h"
-#include "ai/bt_selector.h"
-#include "ai/bt_action.h"
 #include "motion/AStar.h"
 
 using namespace api::ai;
 
-Status Npc::Move(){
-    // if destination not reachable, return failure
-    if (!path_.IsValid()) {
-        std::cout << "Not reachable" << target_reachable_ << std::endl;
-        return Status::kFailure;
-    }
-        if (!path_.IsDone()) {
-          std::cout << "Move" << std::endl;
-            // still arriving, return running
-            return Status::kRunning;
-        }
-            // if destination reached, return success
-            return Status::kSuccess;
-    }
+void Npc::Setup(std::string_view name, std::string_view filename,
+                   TileMap* tilemap, sf::Vector2f& cantina_position, std::vector<Ressource> ressources) {
 
-Status Npc::Eat(){
-    std::cout << "I'm eating" << std::endl;
-    // No failure, until we have food storage system
-    hunger_ -= kHungerRate;
-    if (hunger_ > 0) {
-        return Status::kRunning;
-    } else {
-        //SetNextPath();
-        return Status::kSuccess;
-    }
-}
+  name_ = std::string(name);
 
-Status Npc::HungerBuild() {
-    if (hunger_ >= 100) {
-      std::cout << "I'm hungry, wanna eat........" << std::endl;
-      return Status::kSuccess;
-    } else {
-      std::cout << "I'm not hungry, thanks........" << std::endl;
-      return Status::kFailure;
+  // TODO : find lighter concat for string view
+  if(!texture_.loadFromFile("_assets/sprites/" + std::string(filename))) {
+    std::cout << "Error loading texture " << filename << std::endl;
+    if (!texture_.loadFromFile("_assets/sprites/empty.png")) {
+      std::cout << "Error loading texture empty.png" << std::endl;
     }
-};
-
-Status Npc::Work() {
-  hunger_ += kHungerRate * 2;
-  if (resourceAvailable_) {
-    std::cout << "Resource Available, working....." << std::endl;
-    return Status::kSuccess;
   }
-  return Status::kFailure;
-};
 
-Status Npc::Sleep() {
+  std::cout << "Setup " << name_ << " -- -- -- -- -- -- -- -- -- -- -- -- -- " << std::endl;
 
-  hunger_ += kHungerRate;
-  std::cout << "I'm sleeping" << std::endl;
-  return Status::kSuccess;
-};
+  bt_tree_->SetupBehaviourTree(motor_.get(), path_.get(), tilemap, cantina_position, ressources);
 
-void Npc::SetupBehaviourTree(){
-    auto feedSequence = std::make_unique<Sequence>();
+  motor_->SetPosition({0, 0});
+  motor_->SetSpeed(kMovingSpeed);
 
-    feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::HungerBuild, this)));
-    feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::Eat, this)));
-    feedSequence->AddChild(std::make_unique<Action>(std::bind(&Npc::Move, this)));
-
-    auto selector = std::make_unique<Selector>();
-    // Attach the sequence to the selector
-    selector->AddChild(std::move(feedSequence));
-    selector->AddChild(std::make_unique<Action>(std::bind(&Npc::Work, this)));
-    selector->AddChild(std::make_unique<Action>(std::bind(&Npc::Sleep, this)));
-
-    root_ = std::move(selector);
 }
 
-void Npc::Setup(std::string_view filename, const TileMap* tileMap){
+void Npc::Update(const float dt){
 
-    if(!texture_.loadFromFile("_assets/sprites/" + std::string(filename))) {
-      std::cout << "Error loading texture " << filename << std::endl;
-      if (!texture_.loadFromFile("_assets/sprites/empty.png")) {
-        std::cout << "Error loading texture empty.png" << std::endl;
-      }
+  // // Updating
+  // std::cout << "\n";
+  // std::cout << " -- -- -- -- -- -- -- -- -- -- -- -- -- \n";
+  // std::cout << "Update " << name_ << "\n";
+  // std::cout << " -- -- -- -- -- -- -- -- -- -- -- -- -- \n";
+
+  // -------------------
+  if (path_->IsValid()){
+    motor_->Update(dt);
+    if (!path_->IsDone() && motor_->RemainingDistance() <= 0.001f) {
+      motor_->SetDestination(path_->GetNextPoint());
     }
+  }
 
-    SetupBehaviourTree();
+  bt_tree_->Update(dt);
 
-    motor_.SetPosition({0, 0});
-    motor_.SetSpeed(kMovingSpeed);
-
-    tileMap_ = tileMap;
-
-    static std::mt19937 gen{std::random_device{}()};
-    static std::uniform_int_distribution<size_t> dist(0, tileMap_->GetWalkables().size() - 1);
-
-    sf::Vector2f end = tileMap_->GetWalkables().at(dist(gen));
-
-    Path path = ::motion::Astar::GetPath(16, motor_.GetPosition(), end, tileMap_->GetWalkables());
-    SetPath(path);
-}
-
-void Npc::Update(float dt){
-    root_->Tick();
-    if (path_.IsValid()){
-        motor_.Update(dt);
-        if (!path_.IsDone() && motor_.RemainingDistance() <= 0.001f) {
-            motor_.SetDestination(path_.GetNextPoint());
-        }
-    }
 }
 
 void Npc::Draw(sf::RenderWindow &window){
-    sf::Sprite sprite(texture_);
-    sprite.setPosition(motor_.GetPosition());
-    window.draw(sprite);
-}
-
-void Npc::SetPath(const Path& path){
-    path_ = path;
-    motor_.SetDestination(path_.StartPoint());
-}
-
-void Npc::SetNextPath(){
-  Path path;
-  if (path_index_ < tileMap_->GetHouses().size() - 1) {
-    path = ::motion::Astar::GetPath(16,tileMap_->GetHouses().at(path_index_), tileMap_->GetHouses().at(path_index_ + 1), tileMap_->GetWalkables());
-    path_index_++;
-  } else {
-    path = ::motion::Astar::GetPath(16,tileMap_->GetHouses().at(path_index_), tileMap_->GetHouses().at(0), tileMap_->GetWalkables());
-    path_index_ = 0;
-  }
-  SetPath(path);
+  sf::Sprite sprite(texture_);
+  sprite.setPosition(motor_->GetPosition());
+  window.draw(sprite);
 }

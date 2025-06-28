@@ -106,9 +106,29 @@ void TileMap::Draw(sf::RenderWindow &window) {
   }
 }
 
+void TileMap::SetTile(int idx, Tile tile) {
+  if (idx > 0 && idx < ressources_.size()) {
+    ressources_[idx] = tile;
+  }
+}
+
 
 std::vector<sf::Vector2f> TileMap::GetWalkables() const{
     return walkables_;
+}
+
+std::vector<int> TileMap::GetCollectibles(Tile search_tile){
+
+  std::vector<int> collectibles;
+
+  for (int tile_index = 0; tile_index < ressources_.size(); ++tile_index) {
+    if (ressources_[tile_index] == search_tile) {
+      collectibles.emplace_back(tile_index);
+    }
+  }
+
+  return collectibles;
+
 }
 
 sf::Vector2f TileMap::ScreenPosition(const int index){
