@@ -12,17 +12,12 @@
 namespace api::buildings {
 class Building {
 
-  sf::Texture texture_;
-  const TileMap* tileMap_;
   sf::Vector2f position_;
+  BuildingsType type_;
 
 public:
-  void Setup(std::string_view filename, sf::Vector2f position, TileMap* tileMap);
+  void Setup(BuildingsType type, sf::Vector2f position);
   void Update(float dt);
-
-  void Draw(sf::RenderWindow &window);
-
-  sf::Texture& GetTexture() { return texture_; }
 
 };}
 

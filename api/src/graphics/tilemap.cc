@@ -104,6 +104,17 @@ void TileMap::Draw(sf::RenderWindow &window) {
     }
     tileIndex++;
   }
+
+  tileIndex = 0;
+
+  for (auto tile : buildings_) {
+    if (!(tile == Tile::kEmpty)) {
+      sprite.setPosition(ScreenPosition(tileIndex));
+      sprite.setTexture(textures.Get(tile));
+      window.draw(sprite);
+    }
+    tileIndex++;
+  }
 }
 
 void TileMap::SetTile(int idx, Tile tile) {
@@ -169,6 +180,22 @@ std::vector<sf::Vector2f> TileMap::GetHouses() const {
 };
 
 
-void TileMap::AddBuilding(sf::Vector2f position){
-  buildings_[Index(position)] = Tile::kMaison;
-};
+void TileMap::AddBuilding(sf::Vector2f position, api::buildings::BuildingsType type){
+  switch (type) {
+
+    case api::buildings::BuildingsType::kMine:
+      buildings_[Index(position)] = Tile::kMine;
+      break;
+
+    case api::buildings::BuildingsType::kLumber:
+      buildings_[Index(position)] = Tile::kLumber;
+      break;
+
+    case api::buildings::BuildingsType::kWindmill:
+      buildings_[Index(position)] = Tile::kWindmill;
+      break;
+
+    default:
+      break;
+  }
+}

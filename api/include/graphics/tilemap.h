@@ -6,6 +6,9 @@
 #include "assets/asset_manager.h"
 #include "ui/clickable.h"
 
+namespace api::buildings {
+enum class BuildingsType;
+}
 constexpr int kWidth = 1600;
 constexpr int kHeight = 1280;
 constexpr int kPixelStep = 16;
@@ -24,11 +27,14 @@ public:
         kMaison,
         kRock,
         kTree,
+        kMine,
+        kLumber,
+        kWindmill,
         kLength
     };
 private:
     std::string_view files[static_cast<size_t>(Tile::kLength)] {
-        "empty.png", "grass.png", "water.png", "maison.png", "rock.png", "tree.png"
+        "empty.png", "grass.png", "water.png", "maison.png", "rock.png", "tree.png", "mine.png", "lumber_house.png", "windmill.png"
     };
 
 private:
@@ -49,7 +55,7 @@ public:
     void Draw(sf::RenderWindow &window);
     void SetTile(int, Tile);
 
-    void AddBuilding(sf::Vector2f position);
+    void AddBuilding(sf::Vector2f position, api::buildings::BuildingsType type);
 
     std::vector<sf::Vector2f> GetWalkables() const;
     std::vector<int> GetCollectibles(Tile);

@@ -18,12 +18,12 @@ enum class BuildingsType {
 
 class BuildingsManager {
 
+private:
   std::vector<Building> buildings_;
 
 public:
   void Add(BuildingsType type, sf::Vector2f position, TileMap* tilemap);
   void Update(float dt);
-  void Draw(sf::RenderWindow &window);
 
   std::vector<Building>& GetBuildings(){ return buildings_; }
 };

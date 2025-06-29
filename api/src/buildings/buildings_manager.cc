@@ -6,12 +6,14 @@
 
 #include <SFML/System/Vector2.hpp>
 
-#include "buildings/buildings_factory.h"
 
 namespace api::buildings {
 
 void BuildingsManager::Add(BuildingsType type, sf::Vector2f position, TileMap* tilemap){
-  CreateBuilding(buildings_, type, position, tilemap);
+  buildings_.emplace_back();
+  tilemap->AddBuilding(position, type);
+
+  buildings_.back().Setup(type, position);
 }
 
 void BuildingsManager::Update(float dt){
@@ -19,11 +21,4 @@ void BuildingsManager::Update(float dt){
     building.Update(dt);
   }
 }
-
-void BuildingsManager::Draw(sf::RenderWindow &window){
-  for (auto& building : buildings_) {
-    building.Draw(window);
-  }
-}
-
 }

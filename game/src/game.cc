@@ -102,9 +102,7 @@ namespace game {
             window_.clear();
 
             tilemap_ptr_->Draw(window_);
-            buildings_manager_.Draw(window_);
             npc_manager_.Draw(window_);
-
 
             btnMine->Draw(window_);
             btnLumber->Draw(window_);
