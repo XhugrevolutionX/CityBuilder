@@ -10,20 +10,20 @@
 #include "ressource.h"
 
 class RessourceManager {
-	std::vector<Ressource> ressources_;
+	std::vector<ressource::Ressource> ressources_;
 
    public:
 	void LoadRessources(
-		Ressource::Type type, 
+		ressource::RessourcesType type,
 		std::vector<int> indexes,
 		std::function<void(int, float)> OnChopEvent);
 
-	[[nodiscard]] const std::vector<Ressource> GetRessources(
-		Ressource::Type type) const;
+	[[nodiscard]] const std::vector<ressource::Ressource> GetRessources(
+		ressource::RessourcesType type) const;
 };
 
 inline void RessourceManager::LoadRessources(
-	Ressource::Type type, std::vector<int> indexes,
+	ressource::RessourcesType type, std::vector<int> indexes,
 	std::function<void(int, float)> OnChopEvent) {
 	for (auto& index : indexes) {
 		ressources_.emplace_back();
@@ -34,9 +34,9 @@ inline void RessourceManager::LoadRessources(
 	}
 }
 
-inline const std::vector<Ressource> RessourceManager::GetRessources(
-	Ressource::Type type) const {
-	std::vector<Ressource> ressources_of_type = {};
+inline const std::vector<ressource::Ressource> RessourceManager::GetRessources(
+	ressource::RessourcesType type) const {
+	std::vector<ressource::Ressource> ressources_of_type = {};
 
 	for (const auto& ressource : ressources_) {
 		if (ressource.GetType() == type) {

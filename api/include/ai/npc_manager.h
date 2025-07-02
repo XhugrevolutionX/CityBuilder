@@ -19,7 +19,7 @@ namespace api::ai{
 
     class NpcManager {
 
-        std::vector<Npc> npcs_;
+        std::vector<std::unique_ptr<Npc>> npcs_;
 
     public:
         void Add(NpcType type, sf::Vector2f start_position, TileMap* tilemap, RessourceManager& ressource_manager);

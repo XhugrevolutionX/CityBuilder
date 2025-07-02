@@ -28,17 +28,18 @@ namespace game {
         RessourceManager ressource_manager_;
 
         void ChopEvent(int index, float quantity) {
-          std::cout << "chop event : " << index << "," << quantity << "\n";
+          //std::cout << "chop event : " << index << "," << quantity << "\n";
           if (quantity <= 0){
-            tilemap_ptr_->SetTile(index, TileMap::Tile::kEmpty);
+            tilemap_ptr_->SetRessourcesTile(index, TileMap::Tile::kEmpty);
           }
         }
 
         void Setup(){
-          // Create the main window
-          window_.create(sf::VideoMode({1280, 1080}), "SFML window");
-
           tilemap_ptr_->Setup();
+
+          // Create the main window
+          window_.create(sf::VideoMode({tilemap_ptr_.get()->GetSize()}), "SFML window");
+
           tilemap_ptr_->OnReleasedLeft = []() {
             std::cout << "Clicked tilemap" << "\n";
             buildings_manager_.Add(building_adding_type,
@@ -56,16 +57,16 @@ namespace game {
           btnWindmill = btn_factory.CreateButton(sf::Vector2f(300.f, window_.getSize().y - 100.f), "Windmill");
           btnWindmill->OnReleasedLeft = []() {building_adding_type = api::buildings::BuildingsType::kWindmill; };
 
-          ressource_manager_.LoadRessources(Ressource::Type::kWood,tilemap_ptr_->GetCollectibles(TileMap::Tile::kTree), ChopEvent);
+          ressource_manager_.LoadRessources(ressource::RessourcesType::kWood,tilemap_ptr_->GetCollectibles(TileMap::Tile::kTree), ChopEvent);
 
           // ressource_manager_.LoadRessources(
           //         Ressource::Type::kFood,
           //         tilemap_ptr_->GetCollectibles(TileMap::Tile::kFood), ChopEvent);
 
-          ressource_manager_.LoadRessources(Ressource::Type::kStone,tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
+          ressource_manager_.LoadRessources(ressource::RessourcesType::kStone,tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
 
           npc_manager_.Add(api::ai::NpcType::kCyan, {0,0}, tilemap_ptr_.get(), ressource_manager_);
-          //npc_manager_.Add(api::ai::NpcType::kRed, {0,0}, tilemap_ptr_.get(), ressource_manager_);
+          npc_manager_.Add(api::ai::NpcType::kRed, {0,0}, tilemap_ptr_.get(), ressource_manager_);
 
 
         }

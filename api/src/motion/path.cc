@@ -24,6 +24,8 @@ sf::Vector2f Path::GetNextPoint(){
 
   if (!IsDone()) {
     ++idxPoint_;
+  } else {
+    idxPoint_ = 0;
   }
 
   return path_points_[idxPoint_];

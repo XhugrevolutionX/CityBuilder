@@ -7,62 +7,65 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <algorithm>
+#include <functional>
+namespace ressource {
+
+enum class RessourcesType {
+  kNone, kWood, kStone//, kFood
+};
 
 class Ressource {
 
-public:
-    enum class Type {
-        kNone, kWood, kStone//, kFood
-    };
-
 private:
-    int tile_index_ = 0;
-    float quantity_ = 0;
-    Type type_ = Type::kNone;
-    double cut_time_ = 0;
+  int tile_index_ = 0;
+  float quantity_ = 0;
+  RessourcesType type_ = RessourcesType::kNone;
+  double cut_time_ = 0;
 
 public:
-	[[nodiscard]] Type GetType() const;
-	[[nodiscard]] int GetTileIndex() const;
-	[[nodiscard]] float GetQty() const;
+  [[nodiscard]] RessourcesType GetType() const;
+  [[nodiscard]] int GetTileIndex() const;
+  [[nodiscard]] float GetQty() const;
 
-    void SetType(Type type);
-    void SetIndex(int index);
-    void SetQuantity(float quantity);
+  void SetType(RessourcesType type);
+  void SetIndex(int index);
+  void SetQuantity(float quantity);
 
-    void Exploit(float);
+  void Exploit(float);
 
-    std::function<void(int, float)> OnChopRessource_ = nullptr;
+  std::function<void(int, float)> OnChopRessource_ = nullptr;
 
 };
 
-inline void Ressource::SetType(Type type){
-    type_ = type;
+inline void Ressource::SetType(RessourcesType type){
+  type_ = type;
 }
 inline void Ressource::SetIndex(int index){
-    tile_index_ = index;
+  tile_index_ = index;
 }
 inline void Ressource::SetQuantity(float quantity){
-    quantity_ = quantity;
+  quantity_ = quantity;
 }
 
-inline Ressource::Type Ressource::GetType() const{
-	return type_;
+inline RessourcesType Ressource::GetType() const{
+  return type_;
 }
 inline int Ressource::GetTileIndex() const {
-	return tile_index_;
+  return tile_index_;
 }
 inline float Ressource::GetQty() const {
-	return quantity_;
+  return quantity_;
 }
 
 
 inline void Ressource::Exploit(float rate) {
-	quantity_ -= rate;
-	quantity_ = std::max<float>(quantity_, 0);
+  quantity_ -= rate;
+  quantity_ = std::max<float>(quantity_, 0);
 
-    if (OnChopRessource_) {
-        OnChopRessource_(tile_index_, quantity_);
-    }
+  if (OnChopRessource_) {
+    OnChopRessource_(tile_index_, quantity_);
+  }
 }
+}
+
 #endif //RESSOURCE_H

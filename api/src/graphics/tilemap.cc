@@ -10,6 +10,7 @@
 #include <random>
 
 #include "buildings/buildings_manager.h"
+#include "ressources/ressource.h"
 
 void TileMap::Setup(){
     textures.Load(files);
@@ -87,10 +88,11 @@ void TileMap::Draw(sf::RenderWindow &window) {
   sprite.setTextureRect(sf::IntRect({0, 0}, {kPixelStep, kPixelStep}));
 
   for (auto tile : tiles_) {
-    sprite.setPosition(ScreenPosition(tileIndex));
-    sprite.setTexture(textures.Get(tile));
-    window.draw(sprite);
-
+    if (!(tile == Tile::kEmpty)) {
+      sprite.setPosition(ScreenPosition(tileIndex));
+      sprite.setTexture(textures.Get(tile));
+      window.draw(sprite);
+    }
     tileIndex++;
   }
 
@@ -117,12 +119,17 @@ void TileMap::Draw(sf::RenderWindow &window) {
   }
 }
 
-void TileMap::SetTile(int idx, Tile tile) {
+void TileMap::SetRessourcesTile(int idx, Tile tile) {
   if (idx > 0 && idx < ressources_.size()) {
     ressources_[idx] = tile;
   }
 }
 
+void TileMap::SetTile(int idx, Tile tile) {
+  if (idx > 0 && idx < tiles_.size()) {
+    tiles_[idx] = tile;
+  }
+}
 
 std::vector<sf::Vector2f> TileMap::GetWalkables() const{
     return walkables_;
@@ -163,12 +170,16 @@ sf::Vector2f TileMap::TilePos(sf::Vector2i pos) {
 
 }
 
+std::vector<sf::Vector2f> NearResources(ressource::RessourcesType type, sf::Vector2f pos, sf::Vector2f dist) {
+  return std::vector<sf::Vector2f> {};
+}
+
 
 std::vector<sf::Vector2f> TileMap::GetHouses() const {
   std::vector<sf::Vector2f> houses;
   int tileIndex = 0;
   for (auto element : ressources_) {
-    if (element == Tile::kMaison) {
+    if (element == Tile::kMaison || element == Tile::kLumber || element == Tile::kMine || element == Tile::kWindmill) {
       houses.emplace_back(ScreenPosition(tileIndex));
     }
     tileIndex++;

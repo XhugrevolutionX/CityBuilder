@@ -8,7 +8,7 @@
 using namespace api::ai;
 
 void Npc::Setup(std::string_view name, std::string_view filename,
-                   TileMap* tilemap, sf::Vector2f& cantina_position, std::vector<Ressource> ressources) {
+                   TileMap* tilemap, sf::Vector2f& cantina_position, std::vector<ressource::Ressource> ressources) {
 
   name_ = std::string(name);
 

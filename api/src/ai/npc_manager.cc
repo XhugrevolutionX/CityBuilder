@@ -13,13 +13,13 @@ namespace api::ai {
 
     void NpcManager::Update(float dt){
         for (auto& npc : npcs_) {
-            npc.Update(dt);
+            npc->Update(dt);
         }
     }
 
     void NpcManager::Draw(sf::RenderWindow &window){
         for (auto& npc : npcs_) {
-            npc.Draw(window);
+            npc->Draw(window);
         }
     }
 
