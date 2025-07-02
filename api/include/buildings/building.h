@@ -7,6 +7,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
 
+#include "ai/npc_manager.h"
 #include "graphics/tilemap.h"
 
 namespace api::buildings {
@@ -14,10 +15,14 @@ class Building {
 
   sf::Vector2f position_;
   BuildingsType type_;
+  ai::NpcManager* npcManager_;
+  TileMap* tilemap_;
+  RessourceManager* resourceManager_;
 
 public:
-  void Setup(BuildingsType type, sf::Vector2f position);
+  void Setup(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, RessourceManager* resourceManager);
   void Update(float dt);
+  void SummonNpc();
 
 };}
 

@@ -42,9 +42,7 @@ namespace game {
 
           tilemap_ptr_->OnReleasedLeft = []() {
             std::cout << "Clicked tilemap" << "\n";
-            buildings_manager_.Add(building_adding_type,
-                             TileMap::TilePos(sf::Mouse::getPosition(window_)),
-                             tilemap_ptr_.get());
+            buildings_manager_.Add(building_adding_type, TileMap::TilePos(sf::Mouse::getPosition(window_)), &npc_manager_, tilemap_ptr_.get(), &ressource_manager_);
             building_adding_type = api::buildings::BuildingsType::kNone;
           };
 
@@ -65,8 +63,8 @@ namespace game {
 
           ressource_manager_.LoadRessources(ressource::RessourcesType::kStone,tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
 
-          npc_manager_.Add(api::ai::NpcType::kCyan, {0,0}, tilemap_ptr_.get(), ressource_manager_);
-          npc_manager_.Add(api::ai::NpcType::kRed, {0,0}, tilemap_ptr_.get(), ressource_manager_);
+          //npc_manager_.Add(api::ai::NpcType::kCyan, {0,0}, tilemap_ptr_.get(), ressource_manager_);
+          //npc_manager_.Add(api::ai::NpcType::kRed, {0,0}, tilemap_ptr_.get(), ressource_manager_);
 
 
         }
@@ -97,7 +95,7 @@ namespace game {
 
             // GamePlay, physic frame
             npc_manager_.Update(dt);
-            //buildings_manager_.Update(dt);
+            buildings_manager_.Update(dt);
 
             // Graphic frame
             window_.clear();

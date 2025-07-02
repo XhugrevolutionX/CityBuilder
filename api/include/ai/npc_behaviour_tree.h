@@ -35,8 +35,9 @@ class NpcBehaviourTree {
 
 
 	// Behaviour Constants
-	static constexpr float kHungerRate = 2.f;
-	static constexpr float kExploitRate = 1.f;
+	static constexpr float kHungerRate = 4.f;
+	static constexpr float kExploitRate = 2.f;
+        static constexpr float kEatRate = 10.f;
 
 	// Behaviours
 	float hunger_ = 0.0f;

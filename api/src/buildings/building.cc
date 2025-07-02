@@ -6,14 +6,37 @@
 
 #include <iostream>
 
-namespace api::buildings {
+#include "ai/npc_manager.h"
+#include "buildings/buildings_manager.h"
 
-void Building::Setup(BuildingsType type, sf::Vector2f position) {
+namespace api::buildings {
+void Building::Setup(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, RessourceManager* resourceManager) {
   position_  = position;
   type_ = type;
+  npcManager_ = npcManager;
+  tilemap_ = tilemap;
+  resourceManager_ = resourceManager;
+
+  SummonNpc();
 }
 
 void Building::Update(float dt) {
-  throw std::runtime_error("Not implemented");
+
+}
+
+void Building::SummonNpc() {
+  switch (type_) {
+    case BuildingsType::kLumber :
+      npcManager_->Add(ai::NpcType::kCyan, this->position_, tilemap_, *resourceManager_);
+      break;
+    case BuildingsType::kMine :
+      npcManager_->Add(ai::NpcType::kRed, this->position_, tilemap_, *resourceManager_);
+      break;
+    case BuildingsType::kWindmill :
+      break;
+    case BuildingsType::kNone :
+      break;
+  }
+
 }
 }

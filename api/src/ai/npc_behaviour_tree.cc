@@ -79,9 +79,9 @@ Status NpcBehaviourTree::Move() {
 
 Status NpcBehaviourTree::Eat() {
 	// No failure, until we have food storage system
-	hunger_ -= kHungerRate * tick_dt;
+	hunger_ -= kEatRate * tick_dt;
 	if (hunger_ > 0) {
-	        //std::cout << "Eating !, " << hunger_ << "\n";
+	        std::cout << "Eating !, " << hunger_ << "\n";
 		return Status::kRunning;
 	} else {
 		return Status::kSuccess;
