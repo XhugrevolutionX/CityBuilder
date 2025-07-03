@@ -91,33 +91,18 @@ Status NpcBehaviourTree::Eat() {
 
 Status NpcBehaviourTree::PickResource() {
 
-      std::vector<std::shared_ptr<ressource::Ressource>> resources = ressources_->NearResource(cantina_position_, resource_type_);
+      std::vector<std::shared_ptr<ressource::Ressource>> resources = ressources_->NearExploitableResource(cantina_position_, resource_type_);
 
       if (resources.empty()) {
-	      //std::cout << "No ressources available\n";
-	      return Status::kFailure;
+        //std::cout << "No ressources available\n";
+        return Status::kFailure;
       }
 
-      for (auto r : resources) {
-        if (r->GetQty() > 0) {
-          current_ressource_ = r;
-          SetDestination(TileMap::ScreenPosition(current_ressource_->GetTileIndex()));
+      current_ressource_ = resources.front();
+      SetDestination(TileMap::ScreenPosition(current_ressource_->GetTileIndex()));
 
-          if (path_->IsValid())
-           return Status::kSuccess;
-        }
-      }
-
-      // std::mt19937 gen{std::random_device{}()};
-      // std::uniform_int_distribution<size_t> dist(0, resources.size() - 1);
-      //
-      // if (resources[dist(gen)].GetQty() > 0) {
-	     //  current_ressource_ = resources[dist(gen)];
-	     //  SetDestination(TileMap::ScreenPosition(current_ressource_.GetTileIndex()));
-      //
-	     //  if (path_->IsValid())
-		    //   return Status::kSuccess;
-      // }
+      if (path_->IsValid())
+       return Status::kSuccess;
 
       return Status::kFailure;
 }
@@ -139,7 +124,7 @@ Status NpcBehaviourTree::GetResource() {
 
 Status NpcBehaviourTree::Idle() {
 	hunger_ += kHungerRate * tick_dt;
-	//std::cout << "I'm sleeping" << "\n";
+	std::cout << "I'm sleeping" << "\n";
 	return Status::kSuccess;
 }
 
