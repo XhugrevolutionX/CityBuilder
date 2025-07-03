@@ -21,7 +21,7 @@ namespace api::ai {
                 npc->Setup("Red","character_red.png", tilemap, start_position, ressource_manager.GetRessources(ressource::RessourcesType::kStone));
                 break;
             case NpcType::kLime:
-                npc->Setup("Lime","character_lime.png", tilemap, start_position, ressource_manager.GetRessources(ressource::RessourcesType::kNone));
+                npc->Setup("Lime","character_lime.png", tilemap, start_position, ressource_manager.GetRessources(ressource::RessourcesType::kFood));
                 break;
           case NpcType::kPurple:
                 npc->Setup("Purple","character_purple.png", tilemap, start_position, ressource_manager.GetRessources(ressource::RessourcesType::kNone));

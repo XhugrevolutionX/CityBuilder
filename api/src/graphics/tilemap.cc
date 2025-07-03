@@ -68,8 +68,11 @@ void TileMap::Setup(){
        if (value < perlinThreshold / 1.5) {
          ressources_[idx] = Tile::kRock;
        }
-       else if (value < perlinThreshold) {
+       else if (value < perlinThreshold / 1.25) {
          ressources_[idx] = Tile::kTree;
+       }
+       else if (value < perlinThreshold) {
+         ressources_[idx] = Tile::kFood;
        }
        else {
          ressources_[idx] = Tile::kEmpty;

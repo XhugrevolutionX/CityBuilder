@@ -33,6 +33,7 @@ void Building::SummonNpc() {
       npcManager_->Add(ai::NpcType::kRed, this->position_, tilemap_, *resourceManager_);
       break;
     case BuildingsType::kWindmill :
+      npcManager_->Add(ai::NpcType::kLime, this->position_, tilemap_, *resourceManager_);
       break;
     case BuildingsType::kNone :
       break;

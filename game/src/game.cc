@@ -56,16 +56,8 @@ namespace game {
           btnWindmill->OnReleasedLeft = []() {building_adding_type = api::buildings::BuildingsType::kWindmill; };
 
           ressource_manager_.LoadRessources(ressource::RessourcesType::kWood,tilemap_ptr_->GetCollectibles(TileMap::Tile::kTree), ChopEvent);
-
-          // ressource_manager_.LoadRessources(
-          //         Ressource::Type::kFood,
-          //         tilemap_ptr_->GetCollectibles(TileMap::Tile::kFood), ChopEvent);
-
+          ressource_manager_.LoadRessources(ressource::RessourcesType::kFood, tilemap_ptr_->GetCollectibles(TileMap::Tile::kFood), ChopEvent);
           ressource_manager_.LoadRessources(ressource::RessourcesType::kStone,tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
-
-          //npc_manager_.Add(api::ai::NpcType::kCyan, {0,0}, tilemap_ptr_.get(), ressource_manager_);
-          //npc_manager_.Add(api::ai::NpcType::kRed, {0,0}, tilemap_ptr_.get(), ressource_manager_);
-
 
         }
     }

@@ -11,7 +11,7 @@
 namespace ressource {
 
 enum class RessourcesType {
-  kNone, kWood, kStone//, kFood
+  kNone, kWood, kStone, kFood
 };
 
 class Ressource {

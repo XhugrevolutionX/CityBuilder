@@ -28,6 +28,7 @@ public:
         kMaison,
         kRock,
         kTree,
+        kFood,
         kMine,
         kLumber,
         kWindmill,
@@ -35,7 +36,7 @@ public:
     };
 private:
     std::string_view files[static_cast<size_t>(Tile::kLength)] {
-        "empty.png", "grass.png", "water.png", "maison.png", "rock.png", "tree.png", "mine.png", "lumber_house.png", "windmill.png"
+        "empty.png", "grass.png", "water.png", "maison.png", "rock.png", "tree.png", "wheat.png", "mine.png", "lumber_house.png", "windmill.png"
     };
 
 private:
