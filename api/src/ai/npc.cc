@@ -4,11 +4,11 @@
 #include <random>
 
 #include "motion/AStar.h"
+#include "ressources/ressource_manager.h"
 
 using namespace api::ai;
 
-void Npc::Setup(std::string_view name, std::string_view filename,
-                   TileMap* tilemap, sf::Vector2f& cantina_position, std::vector<ressource::Ressource> ressources) {
+void Npc::Setup(std::string_view name, std::string_view filename, TileMap* tilemap, sf::Vector2f& cantina_position, RessourceManager* ressources, ressource::RessourcesType type) {
 
   name_ = std::string(name);
 
@@ -22,7 +22,7 @@ void Npc::Setup(std::string_view name, std::string_view filename,
 
   std::cout << "Setup " << name_ << " -- -- -- -- -- -- -- -- -- -- -- -- -- " << std::endl;
 
-  bt_tree_->SetupBehaviourTree(motor_.get(), path_.get(), tilemap, cantina_position, ressources);
+  bt_tree_->SetupBehaviourTree(motor_.get(), path_.get(), tilemap, cantina_position, ressources, type);
 
   motor_->SetPosition({0, 0});
   motor_->SetSpeed(kMovingSpeed);

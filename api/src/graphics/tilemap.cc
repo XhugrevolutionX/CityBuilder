@@ -193,6 +193,13 @@ std::vector<sf::Vector2f> TileMap::GetHouses() const {
   return houses;
 };
 
+float TileMap::Distance(sf::Vector2f p1, sf::Vector2f p2) {
+  float a,b;
+  a = p1.x - p2.x;
+  b = p1.y - p2.y;
+  return sqrt(a * a + b * b);
+}
+
 
 void TileMap::AddBuilding(sf::Vector2f position, api::buildings::BuildingsType type){
   switch (type) {

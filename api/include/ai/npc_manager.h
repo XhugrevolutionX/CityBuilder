@@ -22,7 +22,7 @@ namespace api::ai{
         std::vector<std::unique_ptr<Npc>> npcs_;
 
     public:
-        void Add(NpcType type, sf::Vector2f start_position, TileMap* tilemap, RessourceManager& ressource_manager);
+        void Add(NpcType type, sf::Vector2f start_position, TileMap* tilemap, RessourceManager* ressource_manager);
         void Update(float dt);
         void Draw(sf::RenderWindow &window);
 

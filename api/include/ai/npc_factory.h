@@ -9,22 +9,22 @@
 #include "npc_manager.h"
 
 namespace api::ai {
-    inline void CreateNpc(std::vector<std::unique_ptr<Npc>> &npcs, const NpcType type, sf::Vector2f& start_position, TileMap* tilemap, RessourceManager& ressource_manager){
+    inline void CreateNpc(std::vector<std::unique_ptr<Npc>> &npcs, const NpcType type, sf::Vector2f& start_position, TileMap* tilemap, RessourceManager* ressource_manager){
 
       auto npc = std::make_unique<Npc>();
 
         switch (type) {
             case NpcType::kCyan:
-                npc->Setup("Cyan","character_cyan.png", tilemap,start_position, ressource_manager.GetRessources(ressource::RessourcesType::kWood));
+                npc->Setup("Cyan","character_cyan.png", tilemap,start_position, ressource_manager, ressource::RessourcesType::kWood);
                 break;
             case NpcType::kRed:
-                npc->Setup("Red","character_red.png", tilemap, start_position, ressource_manager.GetRessources(ressource::RessourcesType::kStone));
+                npc->Setup("Red","character_red.png", tilemap, start_position, ressource_manager, ressource::RessourcesType::kStone);
                 break;
             case NpcType::kLime:
-                npc->Setup("Lime","character_lime.png", tilemap, start_position, ressource_manager.GetRessources(ressource::RessourcesType::kFood));
+                npc->Setup("Lime","character_lime.png", tilemap, start_position, ressource_manager, ressource::RessourcesType::kFood);
                 break;
           case NpcType::kPurple:
-                npc->Setup("Purple","character_purple.png", tilemap, start_position, ressource_manager.GetRessources(ressource::RessourcesType::kNone));
+                npc->Setup("Purple","character_purple.png", tilemap, start_position, ressource_manager, ressource::RessourcesType::kNone);
                 break;
             default:
                 std::cout << "Error: Npc type not found" << std::endl;

@@ -13,6 +13,7 @@
 #include "ai/bt_sequence.h"
 #include "motion/AStar.h"
 #include "motion/path.h"
+#include "ressources/ressource_manager.h"
 
 using namespace core::ai::behaviour_tree;
 using namespace api::motion;
@@ -90,40 +91,49 @@ Status NpcBehaviourTree::Eat() {
 
 Status NpcBehaviourTree::PickResource() {
 
-	if (ressources_.empty()) {
-		//std::cout << "No ressources available\n";
-		return Status::kFailure;
-	}
+      std::vector<std::shared_ptr<ressource::Ressource>> resources = ressources_->NearResource(cantina_position_, resource_type_);
 
-	std::mt19937 gen{std::random_device{}()};
-	std::uniform_int_distribution<size_t> dist(0, ressources_.size() - 1);
-	
-	if (ressources_[dist(gen)].GetQty() > 0) {
-		current_ressource_ = ressources_[dist(gen)];
-		SetDestination(TileMap::ScreenPosition(current_ressource_.GetTileIndex()));
+      if (resources.empty()) {
+	      //std::cout << "No ressources available\n";
+	      return Status::kFailure;
+      }
 
-		if (path_->IsValid())
-			return Status::kSuccess;
+      for (auto r : resources) {
+        if (r->GetQty() > 0) {
+          current_ressource_ = r;
+          SetDestination(TileMap::ScreenPosition(current_ressource_->GetTileIndex()));
 
-	}
+          if (path_->IsValid())
+           return Status::kSuccess;
+        }
+      }
 
-	return Status::kFailure;
+      // std::mt19937 gen{std::random_device{}()};
+      // std::uniform_int_distribution<size_t> dist(0, resources.size() - 1);
+      //
+      // if (resources[dist(gen)].GetQty() > 0) {
+	     //  current_ressource_ = resources[dist(gen)];
+	     //  SetDestination(TileMap::ScreenPosition(current_ressource_.GetTileIndex()));
+      //
+	     //  if (path_->IsValid())
+		    //   return Status::kSuccess;
+      // }
 
-
+      return Status::kFailure;
 }
 
 Status NpcBehaviourTree::GetResource() {
-	if (current_ressource_.GetQty() <= 0) {
+	if (current_ressource_->GetQty() <= 0) {
 		return Status::kSuccess;
 	}
 
-	current_ressource_.Exploit(kExploitRate * tick_dt);
+	current_ressource_->Exploit(kExploitRate * tick_dt);
 	hunger_ += kHungerRate * tick_dt;
         std::cout << "Working !, ";
         std::cout << "Hunger : " << hunger_ << ", ";
-        std::cout << "Quantity : " << current_ressource_.GetQty() << ", ";
-        std::cout << "Resource Position : " << TileMap::ScreenPosition(current_ressource_.GetTileIndex()).x << ":" << TileMap::ScreenPosition(current_ressource_.GetTileIndex()).y << ", ";
-        std::cout << "type : " << static_cast<int>(current_ressource_.GetType()) << std::endl;
+        std::cout << "Quantity : " << current_ressource_->GetQty() << ", ";
+        std::cout << "Resource Position : " << TileMap::ScreenPosition(current_ressource_->GetTileIndex()).x << ":" << TileMap::ScreenPosition(current_ressource_->GetTileIndex()).y << ", ";
+        std::cout << "type : " << static_cast<int>(current_ressource_->GetType()) << std::endl;
 	return Status::kRunning;
 }
 
@@ -133,7 +143,7 @@ Status NpcBehaviourTree::Idle() {
 	return Status::kSuccess;
 }
 
-void NpcBehaviourTree::SetupBehaviourTree(Motor* npc_motor, Path* path, TileMap* tilemap, sf::Vector2f cantina_position, std::vector<ressource::Ressource> ressources) {
+void NpcBehaviourTree::SetupBehaviourTree(Motor* npc_motor, Path* path, TileMap* tilemap, sf::Vector2f cantina_position, RessourceManager* ressources, ressource::RessourcesType type) {
 	//std::cout << "Setup Behaviour Tree\n";
 
 	hunger_ = 0;
@@ -143,6 +153,7 @@ void NpcBehaviourTree::SetupBehaviourTree(Motor* npc_motor, Path* path, TileMap*
 	tilemap_ = tilemap;
 	cantina_position_ = cantina_position;
 	ressources_ = ressources;
+        resource_type_ = type;
 
 	auto feedSequence = std::make_unique<Sequence>();
 	feedSequence->AddChild(std::make_unique<Action>([this]() { return CheckHunger(); }));

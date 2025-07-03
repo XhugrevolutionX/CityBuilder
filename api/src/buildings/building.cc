@@ -27,13 +27,13 @@ void Building::Update(float dt) {
 void Building::SummonNpc() {
   switch (type_) {
     case BuildingsType::kLumber :
-      npcManager_->Add(ai::NpcType::kCyan, this->position_, tilemap_, *resourceManager_);
+      npcManager_->Add(ai::NpcType::kCyan, this->position_, tilemap_, resourceManager_);
       break;
     case BuildingsType::kMine :
-      npcManager_->Add(ai::NpcType::kRed, this->position_, tilemap_, *resourceManager_);
+      npcManager_->Add(ai::NpcType::kRed, this->position_, tilemap_, resourceManager_);
       break;
     case BuildingsType::kWindmill :
-      npcManager_->Add(ai::NpcType::kLime, this->position_, tilemap_, *resourceManager_);
+      npcManager_->Add(ai::NpcType::kLime, this->position_, tilemap_, resourceManager_);
       break;
     case BuildingsType::kNone :
       break;

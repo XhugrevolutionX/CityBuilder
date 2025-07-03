@@ -52,6 +52,8 @@ private:
 public:
     static sf::Vector2f ScreenPosition(int index);
     static sf::Vector2f TilePos(sf::Vector2i);
+    static float Distance(sf::Vector2f p1, sf::Vector2f p2);
+
 
     void Setup();
     void Draw(sf::RenderWindow &window);
