@@ -1,16 +1,15 @@
-﻿#include "ui/Stock.h"
+﻿#include "resources/Stock.h"
 
 #include <SFML/Graphics/Font.hpp>
 
-namespace api::ui {
+namespace api::resources {
 
-Stock::Stock(ressource::RessourcesType type) : display_(font_) {
+Stock::Stock(ResourcesType type) : display_(font_) {
   quantity_ = 0;
   type_ = type;
 
-
   if (!font_.openFromFile("_assets/fonts/BKANT.TTF")) {
-    //handle error
+    // handle error
   }
 
   display_.setFont(font_);
@@ -19,6 +18,8 @@ Stock::Stock(ressource::RessourcesType type) : display_(font_) {
 
   UpdateDisplay();
 }
+
+int Stock::GetQuantity() const {return quantity_;}
 
 void Stock::AddQuantity(int quantity) {
   quantity_ += quantity;
@@ -32,22 +33,22 @@ void Stock::RemoveQuantity(int quantity) {
 
 void Stock::UpdateDisplay() {
   switch (type_) {
-    case ressource::RessourcesType::kWood:
+    case ResourcesType::kWood:
       display_.setString("Wood : " + std::to_string(quantity_));
       display_.setPosition({10, 0});
       break;
 
-    case ressource::RessourcesType::kStone:
+    case ResourcesType::kStone:
       display_.setString("Stone :" + std::to_string(quantity_));
       display_.setPosition({10, 30});
       break;
 
-    case ressource::RessourcesType::kFood:
+    case ResourcesType::kFood:
       display_.setString("Food : " + std::to_string(quantity_));
       display_.setPosition({10, 60});
       break;
 
-    case ressource::RessourcesType::kNone:
+    case ResourcesType::kNone:
       display_.setString("");
       display_.setPosition({0, 0});
       break;

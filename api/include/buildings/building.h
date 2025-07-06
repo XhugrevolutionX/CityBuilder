@@ -17,10 +17,10 @@ class Building {
   BuildingsType type_;
   ai::NpcManager* npcManager_;
   TileMap* tilemap_;
-  RessourceManager* resourceManager_;
+  ResourceManager* resourceManager_;
 
 public:
-  void Setup(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, RessourceManager* resourceManager);
+  void Setup(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager);
   void Update(float dt);
   void SummonNpc();
 

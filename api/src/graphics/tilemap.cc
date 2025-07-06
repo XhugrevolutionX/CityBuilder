@@ -10,7 +10,7 @@
 #include <random>
 
 #include "buildings/buildings_manager.h"
-#include "ressources/ressource.h"
+#include "resources/resources.h"
 
 void TileMap::Setup(){
     textures.Load(files);
@@ -122,7 +122,7 @@ void TileMap::Draw(sf::RenderWindow &window) {
   }
 }
 
-void TileMap::SetRessourcesTile(int idx, Tile tile) {
+void TileMap::SetResourcesTile(int idx, Tile tile) {
   if (idx >= 0 && idx < ressources_.size()) {
     ressources_[idx] = tile;
   }
@@ -173,7 +173,7 @@ sf::Vector2f TileMap::TilePos(sf::Vector2i pos) {
 
 }
 
-std::vector<sf::Vector2f> NearResources(ressource::RessourcesType type, sf::Vector2f pos, sf::Vector2f dist) {
+std::vector<sf::Vector2f> NearResources(api::resources::ResourcesType type, sf::Vector2f pos, sf::Vector2f dist) {
   return std::vector<sf::Vector2f> {};
 }
 

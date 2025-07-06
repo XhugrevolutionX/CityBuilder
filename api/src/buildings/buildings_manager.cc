@@ -9,7 +9,7 @@
 
 namespace api::buildings {
 
-void BuildingsManager::Add(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, RessourceManager* resourceManager){
+void BuildingsManager::Add(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager){
   buildings_.emplace_back();
   tilemap->AddBuilding(position, type);
 

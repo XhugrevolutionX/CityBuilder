@@ -22,7 +22,7 @@ private:
   std::vector<Building> buildings_;
 
 public:
-  void Add(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, RessourceManager* resourceManager);
+  void Add(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager);
   void Update(float dt);
 
   std::vector<Building>& GetBuildings(){ return buildings_; }

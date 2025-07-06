@@ -10,7 +10,7 @@
 #include "buildings/buildings_manager.h"
 
 namespace api::buildings {
-void Building::Setup(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, RessourceManager* resourceManager) {
+void Building::Setup(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager) {
   position_  = position;
   type_ = type;
   npcManager_ = npcManager;

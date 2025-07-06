@@ -4,21 +4,22 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Text.hpp>
 
-#include "ressources/ressource.h"
+#include "resources/resources.h"
 
 #endif //STOCK_H
 
-namespace api::ui {
+namespace api::resources {
 
   class Stock {
     int quantity_ = 0;
-    ressource::RessourcesType type_;
+    ResourcesType type_;
     sf::Font font_;
     sf::Text display_;
 
   public:
     void UpdateDisplay();
-    Stock(ressource::RessourcesType type);
+    Stock(ResourcesType type);
+    int GetQuantity() const;
     void AddQuantity(int quantity);
     void RemoveQuantity(int quantity);
     void Draw(sf::RenderWindow &window) const;

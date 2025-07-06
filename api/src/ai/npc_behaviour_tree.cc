@@ -13,7 +13,7 @@
 #include "ai/bt_sequence.h"
 #include "motion/AStar.h"
 #include "motion/path.h"
-#include "ressources/ressource_manager.h"
+#include "resources/ressource_manager.h"
 
 using namespace core::ai::behaviour_tree;
 using namespace api::motion;
@@ -91,7 +91,7 @@ Status NpcBehaviourTree::Eat() {
 
 Status NpcBehaviourTree::PickResource() {
 
-      std::vector<std::shared_ptr<ressource::Ressource>> resources = ressources_->NearExploitableResource(cantina_position_, resource_type_);
+      std::vector<std::shared_ptr<resources::Resource>> resources = ressources_->NearExploitableResource(cantina_position_, resource_type_);
 
       if (resources.empty()) {
         //std::cout << "No ressources available\n";
@@ -128,7 +128,7 @@ Status NpcBehaviourTree::Idle() {
 	return Status::kSuccess;
 }
 
-void NpcBehaviourTree::SetupBehaviourTree(Motor* npc_motor, Path* path, TileMap* tilemap, sf::Vector2f cantina_position, RessourceManager* ressources, ressource::RessourcesType type) {
+void NpcBehaviourTree::SetupBehaviourTree(Motor* npc_motor, Path* path, TileMap* tilemap, sf::Vector2f cantina_position, ResourceManager* ressources, resources::ResourcesType type) {
 	//std::cout << "Setup Behaviour Tree\n";
 
 	hunger_ = 0;

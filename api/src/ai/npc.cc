@@ -4,11 +4,11 @@
 #include <random>
 
 #include "motion/AStar.h"
-#include "ressources/ressource_manager.h"
+#include "resources/ressource_manager.h"
 
 using namespace api::ai;
 
-void Npc::Setup(std::string_view name, std::string_view filename, TileMap* tilemap, sf::Vector2f& cantina_position, RessourceManager* ressources, ressource::RessourcesType type) {
+void Npc::Setup(std::string_view name, std::string_view filename, TileMap* tilemap, sf::Vector2f& cantina_position, ResourceManager* ressources, resources::ResourcesType type) {
 
   name_ = std::string(name);
 

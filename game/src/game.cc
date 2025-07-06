@@ -1,10 +1,10 @@
 ﻿#include "game.h"
 
+#include "../../api/include/resources/Stock.h"
 #include "SFML/Graphics.hpp"
 #include "ai/npc_manager.h"
 #include "buildings/buildings_manager.h"
 #include "graphics/tilemap.h"
-#include "ui/Stock.h"
 #include "ui/button_factory.h"
 
 namespace game {
@@ -27,28 +27,28 @@ namespace game {
 
         api::ui::ButtonFactory btn_factory;
 
-        RessourceManager ressource_manager_;
+        ResourceManager resource_manager_;
 
-        api::ui::Stock wood_stock_(ressource::RessourcesType::kWood);
-        api::ui::Stock stone_stock_(ressource::RessourcesType::kStone);
-        api::ui::Stock food_stock_(ressource::RessourcesType::kFood);
+        api::resources::Stock wood_stock_(api::resources::ResourcesType::kWood);
+        api::resources::Stock stone_stock_(api::resources::ResourcesType::kStone);
+        api::resources::Stock food_stock_(api::resources::ResourcesType::kFood);
 
-        void ChopEvent(int index, float quantity, ressource::RessourcesType type) {
+        void ChopEvent(int index, float quantity, api::resources::ResourcesType type) {
           //std::cout << "chop event : " << index << "," << quantity << "\n";
           if (quantity <= 0){
-            tilemap_ptr_->SetRessourcesTile(index, TileMap::Tile::kEmpty);
+            tilemap_ptr_->SetResourcesTile(index, TileMap::Tile::kEmpty);
 
             switch (type) {
-              case ressource::RessourcesType::kWood:
+              case api::resources::ResourcesType::kWood:
                   wood_stock_.AddQuantity(10);
                   break;
-                case ressource::RessourcesType::kStone:
+                case api::resources::ResourcesType::kStone:
                   stone_stock_.AddQuantity(10);
                   break;
-                case ressource::RessourcesType::kFood:
+                case api::resources::ResourcesType::kFood:
                   food_stock_.AddQuantity(10);
                   break;
-                case ressource::RessourcesType::kNone:
+                case api::resources::ResourcesType::kNone:
                   break;
             }
           }
@@ -62,7 +62,7 @@ namespace game {
 
           tilemap_ptr_->OnReleasedLeft = []() {
             std::cout << "Clicked tilemap" << "\n";
-            buildings_manager_.Add(building_adding_type, TileMap::TilePos(sf::Mouse::getPosition(window_)), &npc_manager_, tilemap_ptr_.get(), &ressource_manager_);
+            buildings_manager_.Add(building_adding_type, TileMap::TilePos(sf::Mouse::getPosition(window_)), &npc_manager_, tilemap_ptr_.get(), &resource_manager_);
             building_adding_type = api::buildings::BuildingsType::kNone;
           };
 
@@ -78,17 +78,17 @@ namespace game {
           btnClear = btn_factory.CreateButton(sf::Vector2f(400.f, window_.getSize().y - 100.f), "Clear");
           btnClear->OnReleasedLeft = []() {
             for (int i = 0; i < (tilemap_ptr_->GetSize().x * tilemap_ptr_->GetSize().y); i++) {
-              tilemap_ptr_->SetRessourcesTile(i, TileMap::Tile::kEmpty);
+              tilemap_ptr_->SetResourcesTile(i, TileMap::Tile::kEmpty);
             }
-            ressource_manager_.LoadRessources(ressource::RessourcesType::kWood,tilemap_ptr_->GetCollectibles(TileMap::Tile::kTree), ChopEvent);
-            ressource_manager_.LoadRessources(ressource::RessourcesType::kFood, tilemap_ptr_->GetCollectibles(TileMap::Tile::kFood), ChopEvent);
-            ressource_manager_.LoadRessources(ressource::RessourcesType::kStone,tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
+            resource_manager_.LoadRessources(api::resources::ResourcesType::kWood,tilemap_ptr_->GetCollectibles(TileMap::Tile::kTree), ChopEvent);
+            resource_manager_.LoadRessources(api::resources::ResourcesType::kFood, tilemap_ptr_->GetCollectibles(TileMap::Tile::kFood), ChopEvent);
+            resource_manager_.LoadRessources(api::resources::ResourcesType::kStone,tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
           };
 
 
-          ressource_manager_.LoadRessources(ressource::RessourcesType::kWood,tilemap_ptr_->GetCollectibles(TileMap::Tile::kTree), ChopEvent);
-          ressource_manager_.LoadRessources(ressource::RessourcesType::kFood, tilemap_ptr_->GetCollectibles(TileMap::Tile::kFood), ChopEvent);
-          ressource_manager_.LoadRessources(ressource::RessourcesType::kStone,tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
+          resource_manager_.LoadRessources(api::resources::ResourcesType::kWood,tilemap_ptr_->GetCollectibles(TileMap::Tile::kTree), ChopEvent);
+          resource_manager_.LoadRessources(api::resources::ResourcesType::kFood, tilemap_ptr_->GetCollectibles(TileMap::Tile::kFood), ChopEvent);
+          resource_manager_.LoadRessources(api::resources::ResourcesType::kStone,tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
 
         }
     }
