@@ -15,13 +15,13 @@ class RessourceManager {
 	std::vector<std::shared_ptr<ressource::Ressource>> ressources_;
 
    public:
-	void LoadRessources(ressource::RessourcesType type, std::vector<int> indexes, std::function<void(int, float)> OnChopEvent);
+	void LoadRessources(ressource::RessourcesType type, std::vector<int> indexes, std::function<void(int, float, ressource::RessourcesType)> OnChopEvent);
         auto NearExploitableResource(sf::Vector2f pos, ressource::RessourcesType type);
 };
 
 inline void RessourceManager::LoadRessources(
     ressource::RessourcesType type, std::vector<int> indexes,
-    std::function<void(int, float)> OnChopEvent) {
+    std::function<void(int, float, ressource::RessourcesType)> OnChopEvent) {
 
     const auto [first, last] = std::ranges::remove_if(ressources_, [type] (std::shared_ptr<ressource::Ressource> r){return r->GetType() == type;});
 

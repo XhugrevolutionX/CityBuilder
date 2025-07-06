@@ -33,7 +33,7 @@ public:
 
   void Exploit(float);
 
-  std::function<void(int, float)> OnChopRessource_ = nullptr;
+  std::function<void(int, float, ressource::RessourcesType)> OnChopRessource_ = nullptr;
 
 };
 
@@ -63,7 +63,7 @@ inline void Ressource::Exploit(float rate) {
   quantity_ = std::max<float>(quantity_, 0);
 
   if (OnChopRessource_) {
-    OnChopRessource_(tile_index_, quantity_);
+    OnChopRessource_(tile_index_, quantity_, type_);
   }
 }
 }

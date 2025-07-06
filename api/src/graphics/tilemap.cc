@@ -123,7 +123,7 @@ void TileMap::Draw(sf::RenderWindow &window) {
 }
 
 void TileMap::SetRessourcesTile(int idx, Tile tile) {
-  if (idx > 0 && idx < ressources_.size()) {
+  if (idx >= 0 && idx < ressources_.size()) {
     ressources_[idx] = tile;
   }
 }

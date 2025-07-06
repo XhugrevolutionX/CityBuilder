@@ -4,6 +4,7 @@
 #include "ai/npc_manager.h"
 #include "buildings/buildings_manager.h"
 #include "graphics/tilemap.h"
+#include "ui/Stock.h"
 #include "ui/button_factory.h"
 
 namespace game {
@@ -28,10 +29,28 @@ namespace game {
 
         RessourceManager ressource_manager_;
 
-        void ChopEvent(int index, float quantity) {
+        api::ui::Stock wood_stock_(ressource::RessourcesType::kWood);
+        api::ui::Stock stone_stock_(ressource::RessourcesType::kStone);
+        api::ui::Stock food_stock_(ressource::RessourcesType::kFood);
+
+        void ChopEvent(int index, float quantity, ressource::RessourcesType type) {
           //std::cout << "chop event : " << index << "," << quantity << "\n";
           if (quantity <= 0){
             tilemap_ptr_->SetRessourcesTile(index, TileMap::Tile::kEmpty);
+
+            switch (type) {
+              case ressource::RessourcesType::kWood:
+                  wood_stock_.AddQuantity(10);
+                  break;
+                case ressource::RessourcesType::kStone:
+                  stone_stock_.AddQuantity(10);
+                  break;
+                case ressource::RessourcesType::kFood:
+                  food_stock_.AddQuantity(10);
+                  break;
+                case ressource::RessourcesType::kNone:
+                  break;
+            }
           }
         }
 
@@ -112,6 +131,10 @@ namespace game {
             btnLumber->Draw(window_);
             btnWindmill->Draw(window_);
             btnClear->Draw(window_);
+
+            wood_stock_.Draw(window_);
+            stone_stock_.Draw(window_);
+            food_stock_.Draw(window_);
 
             window_.display();
         }
