@@ -1,6 +1,5 @@
 ﻿#include "game.h"
 
-#include "../../api/include/resources/Stock.h"
 #include "SFML/Graphics.hpp"
 #include "ai/npc_manager.h"
 #include "buildings/buildings_manager.h"
@@ -23,6 +22,7 @@ namespace game {
         std::unique_ptr<api::ui::Button> btnLumber;
         std::unique_ptr<api::ui::Button> btnWindmill;
         std::unique_ptr<api::ui::Button> btnClear;
+        std::unique_ptr<api::ui::Button> btnUi;
 
         api::buildings::BuildingsType building_adding_type = api::buildings::BuildingsType::kNone;
 
@@ -32,12 +32,14 @@ namespace game {
 
         api::resources::StockManager stock_manager_;
 
-        void ChopEvent(int index, float quantity, api::resources::ResourcesType type) {
+        bool ui_ = true;
+
+        void ChopEvent(int index, float total_quantity, float quantity, api::resources::ResourcesType type) {
           //std::cout << "chop event : " << index << "," << quantity << "\n";
           if (quantity <= 0){
             tilemap_ptr_->SetResourcesTile(index, TileMap::Tile::kEmpty);
 
-            stock_manager_.AddStock(type, 10);
+            stock_manager_.AddStock(type, total_quantity);
             }
           }
 
@@ -73,6 +75,9 @@ namespace game {
           };
 
 
+          btnUi = btn_factory.CreateButton(sf::Vector2f(window_.getSize().x - 100.f, window_.getSize().y - 100.f), "Ui");
+          btnUi->OnReleasedLeft = []() { ui_ = !ui_; };
+
           resource_manager_.LoadRessources(api::resources::ResourcesType::kWood,tilemap_ptr_->GetCollectibles(TileMap::Tile::kTree), ChopEvent);
           resource_manager_.LoadRessources(api::resources::ResourcesType::kFood, tilemap_ptr_->GetCollectibles(TileMap::Tile::kFood), ChopEvent);
           resource_manager_.LoadRessources(api::resources::ResourcesType::kStone,tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
@@ -100,6 +105,7 @@ namespace game {
               btnLumber->HandleEvent(event, buttonsWasClicked);
               btnWindmill->HandleEvent(event, buttonsWasClicked);
               btnClear->HandleEvent(event, buttonsWasClicked);
+              btnUi->HandleEvent(event, buttonsWasClicked);
 
               tilemap_ptr_->HandleEvent(event, buttonsWasClicked);
             }
@@ -114,12 +120,15 @@ namespace game {
             tilemap_ptr_->Draw(window_);
             npc_manager_.Draw(window_);
 
+          if (ui_) {
             btnMine->Draw(window_);
             btnLumber->Draw(window_);
             btnWindmill->Draw(window_);
             btnClear->Draw(window_);
 
             stock_manager_.Draw(window_);
+          }
+            btnUi->Draw(window_);
 
             window_.display();
         }

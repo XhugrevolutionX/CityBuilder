@@ -15,13 +15,13 @@ class ResourceManager {
 	std::vector<std::shared_ptr<api::resources::Resource>> ressources_;
 
    public:
-	void LoadRessources(api::resources::ResourcesType type, std::vector<int> indexes, std::function<void(int, float, api::resources::ResourcesType)> OnChopEvent);
+	void LoadRessources(api::resources::ResourcesType type, std::vector<int> indexes, std::function<void(int, float, float, api::resources::ResourcesType)> OnChopEvent);
         auto NearExploitableResource(sf::Vector2f pos, api::resources::ResourcesType type);
 };
 
 inline void ResourceManager::LoadRessources(
     api::resources::ResourcesType type, std::vector<int> indexes,
-    std::function<void(int, float, api::resources::ResourcesType)> OnChopEvent) {
+    std::function<void(int, float, float, api::resources::ResourcesType)> OnChopEvent) {
 
     const auto [first, last] = std::ranges::remove_if(ressources_, [type] (std::shared_ptr<api::resources::Resource> r){return r->GetType() == type;});
 
@@ -31,8 +31,23 @@ inline void ResourceManager::LoadRessources(
 	    ressources_.emplace_back(std::make_shared<api::resources::Resource>());
 	    ressources_.back()->SetType(type);
 	    ressources_.back()->SetIndex(index);
-	    ressources_.back()->SetQuantity(10);
 	    ressources_.back()->OnChopRessource_ = OnChopEvent;
+
+      switch (type) {
+        case api::resources::ResourcesType::kWood:
+          ressources_.back()->SetQuantity(10);
+          break;
+        case api::resources::ResourcesType::kStone:
+          ressources_.back()->SetQuantity(20);
+          break;
+        case api::resources::ResourcesType::kFood:
+          ressources_.back()->SetQuantity(10);
+          break;
+        case api::resources::ResourcesType::kNone:
+          ressources_.back()->SetQuantity(0);
+          break;
+
+      }
     }
 }
 

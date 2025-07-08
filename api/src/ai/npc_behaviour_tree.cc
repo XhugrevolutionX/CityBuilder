@@ -36,8 +36,8 @@ Status NpcBehaviourTree::CheckHunger() {
 		// std::cout << " : Yes, I need to find food\n";
 
 		if (!tilemap_) {
-			//std::cout << "No tilemap\n";
-			return Status::kFailure;
+		  //std::cout << "No tilemap\n";
+		  return Status::kFailure;
 		}
 		if (!path_) {
 			//std::cout << "No path\n";
@@ -61,7 +61,7 @@ Status NpcBehaviourTree::CheckHunger() {
 Status NpcBehaviourTree::Move() {
 	// if destination not reachable, return failure
 	if (!path_->IsValid()) {
-		// std::cout << "Not reachable" << path_->IsValid() << "\n";
+	        //std::cout << "Not reachable" << path_->IsValid() << "\n";
 	        //std::cout << "No path\n";
 		return Status::kFailure;
 	} else {

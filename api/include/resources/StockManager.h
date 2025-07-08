@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+#include "Stock.h"
+
 #ifndef STOCKMANAGER_H
 #define STOCKMANAGER_H
 
