@@ -18,7 +18,7 @@ namespace api::resources {
 
   public:
     void UpdateDisplay();
-    Stock(ResourcesType type);
+    Stock(ResourcesType type, int quantity);
     int GetQuantity() const;
     void AddQuantity(int quantity);
     void RemoveQuantity(int quantity);

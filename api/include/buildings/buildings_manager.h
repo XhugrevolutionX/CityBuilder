@@ -24,6 +24,7 @@ private:
 public:
   void Add(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager);
   void Update(float dt);
+  sf::Vector2i GetPrice(BuildingsType type);
 
   std::vector<Building>& GetBuildings(){ return buildings_; }
 };

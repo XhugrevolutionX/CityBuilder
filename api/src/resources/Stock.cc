@@ -4,8 +4,8 @@
 
 namespace api::resources {
 
-Stock::Stock(ResourcesType type) : display_(font_) {
-  quantity_ = 0;
+Stock::Stock(ResourcesType type, int quantity) : display_(font_) {
+  quantity_ = quantity;
   type_ = type;
 
   if (!font_.openFromFile("_assets/fonts/BKANT.TTF")) {

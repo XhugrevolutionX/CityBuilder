@@ -3,7 +3,14 @@
 //
 
 #include "ai/npc_manager.h"
+
+#include <tracy/Tracy.hpp>
+
 #include "ai/npc_factory.h"
+
+#ifdef TRACY_ENABLE
+#include <tracy/Tracy.hpp>
+#endif // TRACY_ENABLE
 
 namespace api::ai {
 
@@ -12,12 +19,18 @@ namespace api::ai {
   }
 
     void NpcManager::Update(float dt){
+    #ifdef TRACY_ENABLE
+      ZoneScoped;
+    #endif //TRACY_ENBALE
         for (auto& npc : npcs_) {
             npc->Update(dt);
         }
     }
 
     void NpcManager::Draw(sf::RenderWindow &window){
+    #ifdef TRACY_ENABLE
+        ZoneScoped;
+    #endif //TRACY_ENBALE
         for (auto& npc : npcs_) {
             npc->Draw(window);
         }

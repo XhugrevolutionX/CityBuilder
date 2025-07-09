@@ -11,8 +11,16 @@
 
 #include "buildings/buildings_manager.h"
 #include "resources/resources.h"
+#ifdef TRACY_ENABLE
+#include <tracy/Tracy.hpp>
+#endif // TRACY_ENABLE
 
 void TileMap::Setup(){
+
+  #ifdef TRACY_ENABLE
+  ZoneScoped;
+  #endif // TRACY_ENABLE
+
     textures.Load(files);
 
     noise::module::Perlin perlin;

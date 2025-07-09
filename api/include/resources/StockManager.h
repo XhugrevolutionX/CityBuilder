@@ -9,6 +9,10 @@
 #ifndef STOCKMANAGER_H
 #define STOCKMANAGER_H
 
+#ifdef TRACY_ENABLE
+#include <tracy/Tracy.hpp>
+#endif // TRACY_ENABLE
+
 namespace api::resources {
 
 class StockManager {
@@ -33,7 +37,7 @@ class StockManager {
 
 };
 
-inline StockManager::StockManager() : wood_(ResourcesType::kWood), stone_(ResourcesType::kStone), food_(ResourcesType::kFood) {}
+inline StockManager::StockManager() : wood_(ResourcesType::kWood, 50), stone_(ResourcesType::kStone, 0), food_(ResourcesType::kFood, 100) {}
 
 inline void StockManager::SelectStock(ResourcesType type) {
 
@@ -74,6 +78,9 @@ inline void StockManager::RemoveStock(ResourcesType type, int quantity) {
 
 
 void StockManager::Draw(sf::RenderWindow &window) const {
+  #ifdef TRACY_ENABLE
+    ZoneScoped;
+  #endif //TRACY_ENBALE
   wood_.Draw(window);
   stone_.Draw(window);
   food_.Draw(window);

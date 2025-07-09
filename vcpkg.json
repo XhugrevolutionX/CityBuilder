@@ -6,6 +6,8 @@
     "libnoise"
   ],
   "features": {
-    "testing": {"description": "Testing", "dependencies": ["gtest"] }
-  }
+    "testing": {"description": "Testing", "dependencies": ["gtest"] },
+    "profiling": {"description": "Profiling", "dependencies": ["tracy"] }
+  },
+  "builtin-baseline": "d43918b9143e24ffb56917daacd9126ad03014d6"
 }

@@ -5,12 +5,18 @@
 #ifndef NPC_FACTORY_H
 #define NPC_FACTORY_H
 #include <iostream>
-
 #include "npc_manager.h"
+
+#ifdef TRACY_ENABLE
+#include <tracy/Tracy.hpp>
+#endif // TRACY_ENABLE
 
 namespace api::ai {
     inline void CreateNpc(std::vector<std::unique_ptr<Npc>> &npcs, const NpcType type, sf::Vector2f& start_position, TileMap* tilemap, ResourceManager* ressource_manager){
 
+      #ifdef TRACY_ENABLE
+      ZoneScoped;
+      #endif //TRACY_ENBALE
       auto npc = std::make_unique<Npc>();
 
         switch (type) {

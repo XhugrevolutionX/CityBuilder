@@ -7,6 +7,11 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <iostream>
 
+
+#ifdef TRACY_ENABLE
+#include <tracy/Tracy.hpp>
+#endif // TRACY_ENABLE
+
 namespace api::ui {
 
 Button::Button(const sf::Vector2f pos, std::string_view label,
@@ -47,6 +52,11 @@ Button::Button(const sf::Vector2f pos, std::string_view label,
 }
 
 void Button::Draw(sf::RenderWindow &window) const {
+
+  #ifdef TRACY_ENABLE
+    ZoneScoped;
+  #endif // TRACY_ENABLE
+
   window.draw(sprite_);
   window.draw(hoverSprite_);
   window.draw(label_);
