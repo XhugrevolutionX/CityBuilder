@@ -4,7 +4,7 @@
 
 #ifndef BUILDING_H
 #define BUILDING_H
-#include <SFML/Graphics/Texture.hpp>
+
 #include <SFML/System/Vector2.hpp>
 
 #include "ai/npc_manager.h"
@@ -18,9 +18,10 @@ class Building {
   ai::NpcManager* npcManager_;
   TileMap* tilemap_;
   ResourceManager* resourceManager_;
+  resources::StockManager* stocks_;
 
 public:
-  void Setup(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager);
+  void Setup(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager, resources::StockManager* stock_manager);
   void Update(float dt);
   void SummonNpc();
 

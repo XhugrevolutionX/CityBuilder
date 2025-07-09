@@ -4,7 +4,6 @@
 
 #include "ai/npc_behaviour_tree.h"
 
-#include <functional>
 #include <iostream>
 #include <random>
 
@@ -82,10 +81,11 @@ Status NpcBehaviourTree::Eat() {
 	// No failure, until we have food storage system
 	hunger_ -= kEatRate * tick_dt;
 	if (hunger_ > 0) {
-	        std::cout << "Eating !, " << hunger_ << "\n";
-		return Status::kRunning;
+	      std::cout << "Eating !, " << hunger_ << "\n";
+	      return Status::kRunning;
 	} else {
-		return Status::kSuccess;
+	  stocks_->RemoveStock(resources::ResourcesType::kFood, 10);
+	  return Status::kSuccess;
 	}
 }
 
@@ -128,7 +128,7 @@ Status NpcBehaviourTree::Idle() {
 	return Status::kSuccess;
 }
 
-void NpcBehaviourTree::SetupBehaviourTree(Motor* npc_motor, Path* path, TileMap* tilemap, sf::Vector2f cantina_position, ResourceManager* ressources, resources::ResourcesType type) {
+void NpcBehaviourTree::SetupBehaviourTree(Motor* npc_motor, Path* path, TileMap* tilemap, sf::Vector2f cantina_position, ResourceManager* ressources, resources::ResourcesType type, resources::StockManager* stock_manager) {
 	//std::cout << "Setup Behaviour Tree\n";
 
 	hunger_ = 0;
@@ -139,6 +139,7 @@ void NpcBehaviourTree::SetupBehaviourTree(Motor* npc_motor, Path* path, TileMap*
 	cantina_position_ = cantina_position;
 	ressources_ = ressources;
         resource_type_ = type;
+        stocks_ = stock_manager;
 
 	auto feedSequence = std::make_unique<Sequence>();
 	feedSequence->AddChild(std::make_unique<Action>([this]() { return CheckHunger(); }));

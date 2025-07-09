@@ -12,11 +12,11 @@
 
 namespace api::buildings {
 
-void BuildingsManager::Add(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager){
+void BuildingsManager::Add(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager, resources::StockManager* stock_manager){
   buildings_.emplace_back();
   tilemap->AddBuilding(position, type);
 
-  buildings_.back().Setup(type, position, npcManager, tilemap, resourceManager);
+  buildings_.back().Setup(type, position, npcManager, tilemap, resourceManager, stock_manager);
 }
 
 void BuildingsManager::Update(float dt) {
@@ -38,5 +38,6 @@ sf::Vector2i BuildingsManager::GetPrice(BuildingsType type) {
     case BuildingsType::kNone:
       return {0,0};
   }
+  return {0,0};
 }
 }  // namespace api::buildings

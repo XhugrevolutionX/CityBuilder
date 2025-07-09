@@ -7,7 +7,6 @@
 #include "motion/motor.h"
 #include "motion/path.h"
 #include "npc_behaviour_tree.h"
-#include "resources/resources.h"
 #include "resources/ressource_manager.h"
 
 using namespace core::ai::behaviour_tree;
@@ -31,7 +30,7 @@ namespace api::ai {
       std::string name_;
 
     public:
-        void Setup(std::string_view name, std::string_view filename, TileMap* tilemap, sf::Vector2f& cantina_position, ResourceManager* ressources, resources::ResourcesType type);
+        void Setup(std::string_view name, std::string_view filename, TileMap* tilemap, sf::Vector2f& cantina_position, ResourceManager* ressources, resources::ResourcesType type, resources::StockManager* stock_manager);
         void Update(float dt);
 
         void Draw(sf::RenderWindow &window);

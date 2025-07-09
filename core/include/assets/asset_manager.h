@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <array>
 #include <span>
-#include <tracy/Tracy.hpp>
 #ifdef TRACY_ENABLE
 #include <tracy/Tracy.hpp>
 #endif // TRACY_ENABLE

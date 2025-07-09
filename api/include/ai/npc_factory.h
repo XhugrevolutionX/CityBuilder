@@ -12,7 +12,7 @@
 #endif // TRACY_ENABLE
 
 namespace api::ai {
-    inline void CreateNpc(std::vector<std::unique_ptr<Npc>> &npcs, const NpcType type, sf::Vector2f& start_position, TileMap* tilemap, ResourceManager* ressource_manager){
+    inline void CreateNpc(std::vector<std::unique_ptr<Npc>> &npcs, const NpcType type, sf::Vector2f& start_position, TileMap* tilemap, ResourceManager* ressource_manager, resources::StockManager* stock_manager){
 
       #ifdef TRACY_ENABLE
       ZoneScoped;
@@ -21,16 +21,16 @@ namespace api::ai {
 
         switch (type) {
             case NpcType::kCyan:
-                npc->Setup("Cyan","character_cyan.png", tilemap,start_position, ressource_manager, resources::ResourcesType::kWood);
+                npc->Setup("Cyan","character_cyan.png", tilemap,start_position, ressource_manager, resources::ResourcesType::kWood, stock_manager);
                 break;
             case NpcType::kRed:
-                npc->Setup("Red","character_red.png", tilemap, start_position, ressource_manager, resources::ResourcesType::kStone);
+                npc->Setup("Red","character_red.png", tilemap, start_position, ressource_manager, resources::ResourcesType::kStone, stock_manager);
                 break;
             case NpcType::kLime:
-                npc->Setup("Lime","character_lime.png", tilemap, start_position, ressource_manager, resources::ResourcesType::kFood);
+                npc->Setup("Lime","character_lime.png", tilemap, start_position, ressource_manager, resources::ResourcesType::kFood, stock_manager);
                 break;
           case NpcType::kPurple:
-                npc->Setup("Purple","character_purple.png", tilemap, start_position, ressource_manager, resources::ResourcesType::kNone);
+                npc->Setup("Purple","character_purple.png", tilemap, start_position, ressource_manager, resources::ResourcesType::kNone, stock_manager);
                 break;
             default:
                 std::cout << "Error: Npc type not found" << std::endl;

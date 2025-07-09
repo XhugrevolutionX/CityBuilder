@@ -6,7 +6,6 @@
 
 #include "resources/resources.h"
 
-#endif //STOCK_H
 
 namespace api::resources {
 
@@ -25,3 +24,5 @@ namespace api::resources {
     void Draw(sf::RenderWindow &window) const;
   };
 }
+
+#endif //STOCK_H

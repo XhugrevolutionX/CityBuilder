@@ -33,7 +33,7 @@ namespace api::ui {
 
         std::unique_ptr<Button> CreateButton(sf::Vector2f pos, std::string_view label){
             return std::move(
-                std::make_unique<api::ui::Button>(
+                std::make_unique<Button>(
                     pos, label,
                     textures_.Get(Sprite::kBgBtn), textures_.Get(Sprite::kHoverBtn),
                     font)

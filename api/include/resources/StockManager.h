@@ -77,7 +77,7 @@ inline void StockManager::RemoveStock(ResourcesType type, int quantity) {
 }
 
 
-void StockManager::Draw(sf::RenderWindow &window) const {
+inline void StockManager::Draw(sf::RenderWindow &window) const {
   #ifdef TRACY_ENABLE
     ZoneScoped;
   #endif //TRACY_ENBALE
@@ -86,9 +86,5 @@ void StockManager::Draw(sf::RenderWindow &window) const {
   food_.Draw(window);
 }
 }
-
-
-
-
 
 #endif //STOCKMANAGER_H

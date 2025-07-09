@@ -12,7 +12,7 @@
 
 using namespace api::ai;
 
-void Npc::Setup(std::string_view name, std::string_view filename, TileMap* tilemap, sf::Vector2f& cantina_position, ResourceManager* ressources, resources::ResourcesType type) {
+void Npc::Setup(std::string_view name, std::string_view filename, TileMap* tilemap, sf::Vector2f& cantina_position, ResourceManager* ressources, resources::ResourcesType type, resources::StockManager* stock_manager) {
 
   #ifdef TRACY_ENABLE
     ZoneScoped;
@@ -30,7 +30,7 @@ void Npc::Setup(std::string_view name, std::string_view filename, TileMap* tilem
 
   std::cout << "Setup " << name_ << " -- -- -- -- -- -- -- -- -- -- -- -- -- " << std::endl;
 
-  bt_tree_->SetupBehaviourTree(motor_.get(), path_.get(), tilemap, cantina_position, ressources, type);
+  bt_tree_->SetupBehaviourTree(motor_.get(), path_.get(), tilemap, cantina_position, ressources, type, stock_manager);
 
   motor_->SetPosition({0, 0});
   motor_->SetSpeed(kMovingSpeed);

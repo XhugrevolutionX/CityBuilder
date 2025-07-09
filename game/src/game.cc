@@ -28,10 +28,9 @@ std::unique_ptr<api::ui::Button> btnWindmill;
 std::unique_ptr<api::ui::Button> btnClear;
 std::unique_ptr<api::ui::Button> btnUi;
 
-api::buildings::BuildingsType building_adding_type =
-    api::buildings::BuildingsType::kNone;
+api::buildings::BuildingsType building_adding_type = api::buildings::BuildingsType::kNone;
 
-api::ui::ButtonFactory btn_factory;
+api::ui::ButtonFactory btn_factory_;
 
 ResourceManager resource_manager_;
 
@@ -39,8 +38,7 @@ api::resources::StockManager stock_manager_;
 
 bool ui_ = true;
 
-void ChopEvent(int index, float total_quantity, float quantity,
-               api::resources::ResourcesType type) {
+void ChopEvent(int index, float total_quantity, float quantity, api::resources::ResourcesType type) {
   // std::cout << "chop event : " << index << "," << quantity << "\n";
   if (quantity <= 0) {
     tilemap_ptr_->SetResourcesTile(index, TileMap::Tile::kEmpty);
@@ -69,32 +67,32 @@ void Setup() {
     if (buildings_manager_.GetPrice(building_adding_type).x <= stock_manager_.GetStock(api::resources::ResourcesType::kWood) && buildings_manager_.GetPrice(building_adding_type).y <= stock_manager_.GetStock(api::resources::ResourcesType::kStone)) {
       stock_manager_.RemoveStock(api::resources::ResourcesType::kWood, buildings_manager_.GetPrice(building_adding_type).x);
       stock_manager_.RemoveStock(api::resources::ResourcesType::kStone, buildings_manager_.GetPrice(building_adding_type).y);
-      buildings_manager_.Add(building_adding_type, TileMap::TilePos(sf::Mouse::getPosition(window_)), &npc_manager_, tilemap_ptr_.get(), &resource_manager_);
+      buildings_manager_.Add(building_adding_type, TileMap::TilePos(sf::Mouse::getPosition(window_)), &npc_manager_, tilemap_ptr_.get(), &resource_manager_, &stock_manager_);
     } else {
       std::cout << "Not Enough Materials" << "\n";
     }
     building_adding_type = api::buildings::BuildingsType::kNone;
   };
 
-  btnLumber = btn_factory.CreateButton(
+  btnLumber = btn_factory_.CreateButton(
     sf::Vector2f(100.f, window_.getSize().y - 100.f), "Lumber");
   btnLumber->OnReleasedLeft = []() {
     building_adding_type = api::buildings::BuildingsType::kLumber;
   };
 
-  btnMine = btn_factory.CreateButton(
+  btnMine = btn_factory_.CreateButton(
       sf::Vector2f(200.f, window_.getSize().y - 100.f), "Mine");
   btnMine->OnReleasedLeft = []() {
     building_adding_type = api::buildings::BuildingsType::kMine;
   };
 
-  btnWindmill = btn_factory.CreateButton(
+  btnWindmill = btn_factory_.CreateButton(
       sf::Vector2f(300.f, window_.getSize().y - 100.f), "Windmill");
   btnWindmill->OnReleasedLeft = []() {
     building_adding_type = api::buildings::BuildingsType::kWindmill;
   };
 
-  btnClear = btn_factory.CreateButton(
+  btnClear = btn_factory_.CreateButton(
       sf::Vector2f(400.f, window_.getSize().y - 100.f), "Clear");
   btnClear->OnReleasedLeft = []() {
     for (int i = 0; i < (tilemap_ptr_->GetSize().x * tilemap_ptr_->GetSize().y);
@@ -112,7 +110,7 @@ void Setup() {
         tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
   };
 
-  btnUi = btn_factory.CreateButton(
+  btnUi = btn_factory_.CreateButton(
       sf::Vector2f(window_.getSize().x - 100.f, window_.getSize().y - 100.f),
       "Ui");
   btnUi->OnReleasedLeft = []() { ui_ = !ui_; };

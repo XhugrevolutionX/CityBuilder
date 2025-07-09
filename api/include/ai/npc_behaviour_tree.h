@@ -11,7 +11,7 @@
 #include "graphics/tilemap.h"
 #include "motion/motor.h"
 #include "motion/path.h"
-#include "resources/resources.h"
+#include "resources/StockManager.h"
 #include "resources/ressource_manager.h"
 
 namespace api::ai {
@@ -47,11 +47,12 @@ class NpcBehaviourTree {
 
 	sf::Vector2f cantina_position_;
 	ResourceManager* ressources_;
+	resources::StockManager* stocks_;
         resources::ResourcesType resource_type_;
 	std::shared_ptr<resources::Resource> current_ressource_;
 
    public:
-	void SetupBehaviourTree(motion::Motor* npc_motor, motion::Path* path, TileMap* tilemap, sf::Vector2f cantina_position, ResourceManager* ressources, resources::ResourcesType type);
+	void SetupBehaviourTree(motion::Motor* npc_motor, motion::Path* path, TileMap* tilemap, sf::Vector2f cantina_position, ResourceManager* ressources, resources::ResourcesType type, resources::StockManager* stock_manager);
 	void Update(float dt);
 };
 }  // namespace api::ai

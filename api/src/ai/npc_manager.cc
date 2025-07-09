@@ -3,9 +3,6 @@
 //
 
 #include "ai/npc_manager.h"
-
-#include <tracy/Tracy.hpp>
-
 #include "ai/npc_factory.h"
 
 #ifdef TRACY_ENABLE
@@ -14,8 +11,8 @@
 
 namespace api::ai {
 
-  void NpcManager::Add(NpcType type, sf::Vector2f start_position, TileMap* tilemap, ResourceManager* ressource_manager) {
-    CreateNpc(npcs_, type, start_position, tilemap, ressource_manager);
+  void NpcManager::Add(NpcType type, sf::Vector2f start_position, TileMap* tilemap, ResourceManager* ressource_manager, resources::StockManager* stock_manager) {
+    CreateNpc(npcs_, type, start_position, tilemap, ressource_manager, stock_manager);
   }
 
     void NpcManager::Update(float dt){
