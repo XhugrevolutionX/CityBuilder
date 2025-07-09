@@ -190,7 +190,8 @@ std::vector<sf::Vector2f> TileMap::GetHouses() const {
   std::vector<sf::Vector2f> houses;
   int tileIndex = 0;
   for (auto element : ressources_) {
-    if (element == Tile::kMaison || element == Tile::kLumber || element == Tile::kMine || element == Tile::kWindmill) {
+    if (element == Tile::kMaison || element == Tile::kLumber ||
+        element == Tile::kMine || element == Tile::kWindmill) {
       houses.emplace_back(ScreenPosition(tileIndex));
     }
     tileIndex++;
@@ -199,7 +200,11 @@ std::vector<sf::Vector2f> TileMap::GetHouses() const {
     return std::vector<sf::Vector2f>();
   }
   return houses;
-};
+}
+
+TileMap::Tile TileMap::GetGroundType(int index) {
+  return tiles_.at(index);
+}
 
 float TileMap::Distance(sf::Vector2f p1, sf::Vector2f p2) {
   float a,b;

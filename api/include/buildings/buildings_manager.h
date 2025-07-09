@@ -18,7 +18,6 @@ enum class BuildingsType {
 
 class BuildingsManager {
 
-private:
   std::vector<Building> buildings_;
 
 public:
@@ -29,6 +28,5 @@ public:
   std::vector<Building>& GetBuildings(){ return buildings_; }
 };
 }
-
 
 #endif //BUILDINGS_MANAGER_H

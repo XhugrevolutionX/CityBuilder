@@ -36,6 +36,8 @@ void Building::SummonNpc() {
       break;
     case BuildingsType::kNone :
       break;
+    default :
+      break;
   }
 
 }

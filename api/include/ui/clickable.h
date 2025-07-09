@@ -19,8 +19,6 @@ namespace api::ui {
         // Constructeur protected, la classe demande un heritage
         Clickable() = default;
 
-        std::function<void()> OnHoverEnter;
-        std::function<void()> OnHoverExit;
 
     public:
         virtual ~Clickable() = default;
@@ -32,6 +30,9 @@ namespace api::ui {
         std::function<void()> OnReleasedRight;
         std::function<void()> OnPressedLeft;
         std::function<void()> OnPressedRight;
+
+        std::function<void()> OnHoverEnter;
+        std::function<void()> OnHoverExit;
     };
 }
 

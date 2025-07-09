@@ -29,7 +29,7 @@ namespace api::ai {
             case NpcType::kLime:
                 npc->Setup("Lime","character_lime.png", tilemap, start_position, ressource_manager, resources::ResourcesType::kFood, stock_manager);
                 break;
-          case NpcType::kPurple:
+            case NpcType::kPurple:
                 npc->Setup("Purple","character_purple.png", tilemap, start_position, ressource_manager, resources::ResourcesType::kNone, stock_manager);
                 break;
             default:

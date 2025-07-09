@@ -39,13 +39,11 @@ private:
         "empty.png", "grass.png", "water.png", "maison.png", "rock.png", "tree.png", "wheat.png", "mine.png", "lumber_house.png", "windmill.png"
     };
 
-private:
     std::array<Tile, kWidth/kPixelStep * kHeight/kPixelStep> tiles_ = {};
     std::array<Tile, kWidth/kPixelStep * kHeight/kPixelStep> ressources_ = {};
     std::array<Tile, kWidth/kPixelStep * kHeight/kPixelStep> buildings_ = {};
     AssetManager<sf::Texture, Tile, "_assets/sprites"> textures;
 
-    static int Index(sf::Vector2f screenPosition);
 
     std::vector<sf::Vector2f> walkables_;
 
@@ -53,6 +51,7 @@ public:
     static sf::Vector2f ScreenPosition(int index);
     static sf::Vector2f TilePos(sf::Vector2i);
     static float Distance(sf::Vector2f p1, sf::Vector2f p2);
+    static int Index(sf::Vector2f screenPosition);
 
 
     void Setup();
@@ -68,5 +67,6 @@ public:
     std::vector<sf::Vector2f> GetHouses() const;
     static int GetStep() {return kPixelStep;}
     static sf::Vector2u GetSize() {return {kWidth, kHeight};}
+    Tile GetGroundType(int index);
 };
 #endif
