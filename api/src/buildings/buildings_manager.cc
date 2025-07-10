@@ -28,7 +28,7 @@ void BuildingsManager::Update(float dt) {
     building.Update(dt);
   }
 }
-sf::Vector2i BuildingsManager::GetPrice(BuildingsType type) {
+std::pair<int, int> BuildingsManager::GetPrice(BuildingsType type) {
   switch (type) {
     case BuildingsType::kLumber:
       return {50,50};

@@ -12,6 +12,7 @@
 
 #include "assets/asset_manager.h"
 #include "button.h"
+#include "label_button.h"
 
 namespace api::ui {
     class ButtonFactory {
@@ -35,6 +36,15 @@ namespace api::ui {
             return std::move(
                 std::make_unique<Button>(
                     pos, label,
+                    textures_.Get(Sprite::kBgBtn), textures_.Get(Sprite::kHoverBtn),
+                    font)
+            );
+        }
+
+      std::unique_ptr<LabelButton> CreateLabelButton(sf::Vector2f pos, std::string_view label, std::string_view price_label){
+            return std::move(
+                std::make_unique<LabelButton>(
+                    pos, label, price_label,
                     textures_.Get(Sprite::kBgBtn), textures_.Get(Sprite::kHoverBtn),
                     font)
             );

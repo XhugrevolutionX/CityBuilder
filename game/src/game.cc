@@ -6,6 +6,7 @@
 #include "graphics/tilemap.h"
 #include "resources/StockManager.h"
 #include "ui/button_factory.h"
+#include "ui/label_button.h"
 
 #ifdef TRACY_ENABLE
 #include <tracy/Tracy.hpp>
@@ -22,9 +23,9 @@ auto tilemap_ptr_ = std::make_unique<TileMap>();
 api::ai::NpcManager npc_manager_;
 api::buildings::BuildingsManager buildings_manager_;
 
-std::unique_ptr<api::ui::Button> btn_mine_;
-std::unique_ptr<api::ui::Button> btn_lumber_;
-std::unique_ptr<api::ui::Button> btn_windmill_;
+std::unique_ptr<api::ui::LabelButton> btn_mine_;
+std::unique_ptr<api::ui::LabelButton> btn_lumber_;
+std::unique_ptr<api::ui::LabelButton> btn_windmill_;
 std::unique_ptr<api::ui::Button> btn_clear_;
 std::unique_ptr<api::ui::Button> btn_ui_;
 
@@ -79,6 +80,7 @@ void Setup() {
   ZoneScoped;
 #endif  // TRACY_ENBALE
 
+  //Setup tilemap
   tilemap_ptr_->Setup();
 
   {
@@ -89,13 +91,14 @@ void Setup() {
     window_.create(sf::VideoMode({tilemap_ptr_.get()->GetSize()}), "SFML window");
   }
 
+  // Attach click behavior to the tilemap
   tilemap_ptr_->OnReleasedLeft = []() {
     std::cout << "Clicked tilemap" << "\n";
     if (building_adding_type_ != api::buildings::BuildingsType::kNone) {
       if (tilemap_ptr_->GetGroundType(TileMap::Index(TileMap::TilePos(sf::Mouse::getPosition(window_)))) == TileMap::Tile::kGrass) {
-        if (buildings_manager_.GetPrice(building_adding_type_).x <= stock_manager_.GetStock(api::resources::ResourcesType::kWood) && buildings_manager_.GetPrice(building_adding_type_).y <= stock_manager_.GetStock(api::resources::ResourcesType::kStone)) {
-          stock_manager_.RemoveStock(api::resources::ResourcesType::kWood, buildings_manager_.GetPrice(building_adding_type_).x);
-          stock_manager_.RemoveStock(api::resources::ResourcesType::kStone, buildings_manager_.GetPrice(building_adding_type_).y);
+        if (buildings_manager_.GetPrice(building_adding_type_).first <= stock_manager_.GetStock(api::resources::ResourcesType::kWood) && buildings_manager_.GetPrice(building_adding_type_).second <= stock_manager_.GetStock(api::resources::ResourcesType::kStone)) {
+          stock_manager_.RemoveStock(api::resources::ResourcesType::kWood, buildings_manager_.GetPrice(building_adding_type_).first);
+          stock_manager_.RemoveStock(api::resources::ResourcesType::kStone, buildings_manager_.GetPrice(building_adding_type_).second);
           buildings_manager_.Add(building_adding_type_, TileMap::TilePos(sf::Mouse::getPosition(window_)), &npc_manager_, tilemap_ptr_.get(), &resource_manager_, &stock_manager_);
         } else {
           std::cout << "Not Enough Materials" << "\n";
@@ -109,6 +112,7 @@ void Setup() {
     }
   };
 
+  //Create the UI
   if (!font_.openFromFile("_assets/fonts/BKANT.TTF")) {
     // handle error
   }
@@ -129,26 +133,22 @@ void Setup() {
   ui_resources_background_.setOrigin({ ui_resources_background_.getSize().x / 2, ui_resources_background_.getSize().y / 2});
   ui_resources_background_.setPosition({90.f, 60.f});
 
-  btn_lumber_ = btn_factory_.CreateButton(sf::Vector2f(150.f, window_.getSize().y - 75.f), "Lumber");
+
+  //Create the buttons and attach their click behaviors
+  btn_lumber_ = btn_factory_.CreateLabelButton(sf::Vector2f(150.f, window_.getSize().y - 75.f), "Lumber", "Wood: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kLumber).first) + ", Stone: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kLumber).second));
   btn_lumber_->OnReleasedLeft = []() {
     building_adding_type_ = api::buildings::BuildingsType::kLumber;
   };
-  btn_lumber_->OnHoverEnter = []() { prices_ = true; prices_text_.setString("Wood: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kLumber).x) + ", Stone: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kLumber).y)); prices_text_.setPosition({150.f, window_.getSize().y - 110.f});};
-  btn_lumber_->OnHoverExit = []() { prices_ = false;};
 
-  btn_mine_ = btn_factory_.CreateButton(sf::Vector2f(250.f, window_.getSize().y - 75.f), "Mine");
+  btn_mine_ = btn_factory_.CreateLabelButton(sf::Vector2f(250.f, window_.getSize().y - 75.f), "Mine", "Wood: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kMine).first) + ", Stone: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kMine).second));
   btn_mine_->OnReleasedLeft = []() {
     building_adding_type_ = api::buildings::BuildingsType::kMine;
   };
-  btn_mine_->OnHoverEnter = []() { prices_ = true; prices_text_.setString("Wood: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kMine).x) + ", Stone: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kMine).y)); prices_text_.setPosition({250.f, window_.getSize().y - 110.f});};
-  btn_mine_->OnHoverExit = []() { prices_ = false;};
 
-  btn_windmill_ = btn_factory_.CreateButton(sf::Vector2f(350.f, window_.getSize().y - 75.f), "Windmill");
+  btn_windmill_ = btn_factory_.CreateLabelButton(sf::Vector2f(350.f, window_.getSize().y - 75.f), "Windmill", "Wood: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kWindmill).first) + ", Stone: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kWindmill).second));
   btn_windmill_->OnReleasedLeft = []() {
     building_adding_type_ = api::buildings::BuildingsType::kWindmill;
   };
-  btn_windmill_->OnHoverEnter = []() { prices_ = true; prices_text_.setString("Wood: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kWindmill).x) + ", Stone: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kWindmill).y)); prices_text_.setPosition({350.f, window_.getSize().y - 110.f});};
-  btn_windmill_->OnHoverExit = []() { prices_ = false;};
 
   btn_clear_ = btn_factory_.CreateButton(
       sf::Vector2f(window_.getSize().x - 350.f, window_.getSize().y - 75.f), "Clear");
@@ -165,12 +165,11 @@ void Setup() {
   btn_ui_ = btn_factory_.CreateButton(sf::Vector2f(window_.getSize().x - 250.f, window_.getSize().y - 75.f), "Ui");
   btn_ui_->OnReleasedLeft = []() { ui_ = !ui_; };
 
+
+  //Load the resources
   resource_manager_.LoadResources(api::resources::ResourcesType::kWood, tilemap_ptr_->GetCollectibles(TileMap::Tile::kTree), ChopEvent);
   resource_manager_.LoadResources(api::resources::ResourcesType::kFood, tilemap_ptr_->GetCollectibles(TileMap::Tile::kFood), ChopEvent);
   resource_manager_.LoadResources(api::resources::ResourcesType::kStone, tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
-
-  //buildings_manager_.Add(api::buildings::BuildingsType::kLumber, {200, 200}, &npc_manager_, tilemap_ptr_.get(), &resource_manager_, &stock_manager_);
-  //buildings_manager_.Add(api::buildings::BuildingsType::kMine, {216, 200}, &npc_manager_, tilemap_ptr_.get(), &resource_manager_, &stock_manager_);
 
 }
 }  // namespace

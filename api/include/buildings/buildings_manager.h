@@ -23,7 +23,7 @@ class BuildingsManager {
 public:
   void Add(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager, resources::StockManager* stock_manager);
   void Update(float dt);
-  sf::Vector2i GetPrice(BuildingsType type);
+  std::pair<int, int> GetPrice(BuildingsType type);
 
   std::vector<Building>& GetBuildings(){ return buildings_; }
 };

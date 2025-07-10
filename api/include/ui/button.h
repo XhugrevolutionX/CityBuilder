@@ -20,6 +20,7 @@ namespace api::ui {
 
     public:
         Button(sf::Vector2f pos, std::string_view label, const sf::Texture &t, const sf::Texture &hover_t, const sf::Font& font);
+        void SetHoverState(bool hover);
         void Draw(sf::RenderWindow &window) const;
     };
 

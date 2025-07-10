@@ -37,14 +37,10 @@ Button::Button(const sf::Vector2f pos, std::string_view label,
   Button::SetZone(sf::IntRect(int_pos, int_size));
 
   OnHoverEnter = [this]() {
-    sprite_.setColor(sf::Color(0, 0, 0, 0));
-    hoverSprite_.setColor(sf::Color(255, 255, 255, 255));
-    label_.setFillColor(sf::Color::Black);
+    SetHoverState(true);
   };
   OnHoverExit = [this]() {
-    sprite_.setColor(sf::Color(255, 255, 255, 255));
-    hoverSprite_.setColor(sf::Color(0, 0, 0, 0));
-    label_.setFillColor(sf::Color::White);
+    SetHoverState(false);
   };
 
   sprite_.setColor(sf::Color(255, 255, 255, 255));
@@ -61,4 +57,21 @@ void Button::Draw(sf::RenderWindow &window) const {
   window.draw(hoverSprite_);
   window.draw(label_);
 }
+
+
+void Button::SetHoverState(bool hover) {
+  if (hover) {
+    sprite_.setColor(sf::Color(0, 0, 0, 0));
+    hoverSprite_.setColor(sf::Color(255, 255, 255, 255));
+    label_.setFillColor(sf::Color::Black);
+  }
+  else {
+    sprite_.setColor(sf::Color(255, 255, 255, 255));
+    hoverSprite_.setColor(sf::Color(0, 0, 0, 0));
+    label_.setFillColor(sf::Color::White);
+  }
+}
+
+
+
 }  // namespace api::ui
