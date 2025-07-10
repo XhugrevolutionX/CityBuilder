@@ -37,7 +37,7 @@ class StockManager {
 
 };
 
-inline StockManager::StockManager() : wood_(ResourcesType::kWood, 50), stone_(ResourcesType::kStone, 0), food_(ResourcesType::kFood, 100) {}
+inline StockManager::StockManager() : wood_(ResourcesType::kWood, 200), stone_(ResourcesType::kStone, 100), food_(ResourcesType::kFood, 100) {}
 
 inline void StockManager::SelectStock(ResourcesType type) {
 

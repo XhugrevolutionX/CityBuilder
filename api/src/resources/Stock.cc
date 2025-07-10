@@ -39,7 +39,7 @@ void Stock::UpdateDisplay() {
       break;
 
     case ResourcesType::kStone:
-      display_.setString("Stone :" + std::to_string(quantity_));
+      display_.setString("Stone : " + std::to_string(quantity_));
       display_.setPosition({10, 30});
       break;
 

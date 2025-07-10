@@ -12,39 +12,42 @@
 #include "resources.h"
 
 class ResourceManager {
-	std::vector<std::shared_ptr<api::resources::Resource>> ressources_;
+	std::vector<std::shared_ptr<api::resources::Resource>> resources_;
 
    public:
-	void LoadRessources(api::resources::ResourcesType type, std::vector<int> indexes, std::function<void(int, float, float, api::resources::ResourcesType)> OnChopEvent);
+	void LoadResources(api::resources::ResourcesType type, std::vector<int> indexes, std::function<void(int, float, float, api::resources::ResourcesType)> OnChopEvent);
         auto NearExploitableResource(sf::Vector2f pos, api::resources::ResourcesType type);
 };
 
-inline void ResourceManager::LoadRessources(
+inline void ResourceManager::LoadResources(
     api::resources::ResourcesType type, std::vector<int> indexes,
     std::function<void(int, float, float, api::resources::ResourcesType)> OnChopEvent) {
 
-    const auto [first, last] = std::ranges::remove_if(ressources_, [type] (std::shared_ptr<api::resources::Resource> r){return r->GetType() == type;});
+    const auto [first, last] = std::ranges::remove_if(resources_, [type] (std::shared_ptr<api::resources::Resource> r){return r->GetType() == type;});
 
-    ressources_.erase(first, last);
+    resources_.erase(first, last);
 
     for (auto& index : indexes) {
-	    ressources_.emplace_back(std::make_shared<api::resources::Resource>());
-	    ressources_.back()->SetType(type);
-	    ressources_.back()->SetIndex(index);
-	    ressources_.back()->OnChopRessource_ = OnChopEvent;
+	    resources_.emplace_back(std::make_shared<api::resources::Resource>());
+	    resources_.back()->SetType(type);
+	    resources_.back()->SetIndex(index);
+	    resources_.back()->OnChopRessource_ = OnChopEvent;
 
       switch (type) {
         case api::resources::ResourcesType::kWood:
-          ressources_.back()->SetQuantity(10);
+          resources_.back()->SetQuantity(10);
           break;
         case api::resources::ResourcesType::kStone:
-          ressources_.back()->SetQuantity(20);
+          resources_.back()->SetQuantity(20);
           break;
         case api::resources::ResourcesType::kFood:
-          ressources_.back()->SetQuantity(10);
+          resources_.back()->SetQuantity(10);
           break;
         case api::resources::ResourcesType::kNone:
-          ressources_.back()->SetQuantity(0);
+          resources_.back()->SetQuantity(0);
+          break;
+        default:
+          std::cerr << "Invalid resource type" << std::endl;
           break;
 
       }
@@ -52,7 +55,7 @@ inline void ResourceManager::LoadRessources(
 }
 
 inline auto ResourceManager::NearExploitableResource(sf::Vector2f pos, api::resources::ResourcesType type) {
-  auto filtered = ressources_ | std::views::filter([type](std::shared_ptr<api::resources::Resource> r){return r->GetType() == type && r->GetQty() != 0;});
+  auto filtered = resources_ | std::views::filter([type](std::shared_ptr<api::resources::Resource> r){return r->GetType() == type && r->GetQty() != 0;});
 
   std::vector sorted(filtered.begin(), filtered.end());
 

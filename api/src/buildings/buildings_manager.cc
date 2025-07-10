@@ -31,9 +31,9 @@ void BuildingsManager::Update(float dt) {
 sf::Vector2i BuildingsManager::GetPrice(BuildingsType type) {
   switch (type) {
     case BuildingsType::kLumber:
-      return {50,0};
+      return {50,50};
     case BuildingsType::kMine:
-      return {100, 0};
+      return {100, 50};
     case BuildingsType::kWindmill:
       return {200, 100};
     case BuildingsType::kNone:
