@@ -54,6 +54,7 @@ class NpcBehaviourTree {
    public:
 	void SetupBehaviourTree(motion::Motor* npc_motor, motion::Path* path, TileMap* tilemap, sf::Vector2f cantina_position, ResourceManager* ressources, resources::ResourcesType type, resources::StockManager* stock_manager);
 	void Update(float dt);
+        float GetHunger();
 };
 }  // namespace api::ai
 

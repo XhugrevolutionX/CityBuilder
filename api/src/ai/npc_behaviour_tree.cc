@@ -32,29 +32,34 @@ Status NpcBehaviourTree::CheckHunger() {
 	// std::cout << "Am I hungry ? " << std::to_string(hunger_);
 
 	if (hunger_ >= 100) {
-		// std::cout << " : Yes, I need to find food\n";
+	  // std::cout << " : Yes, I need to find food\n";
+	  if (!tilemap_) {
+	    //std::cout << "No tilemap\n";
+	    return Status::kFailure;
+	  }
+	  if (!path_) {
+	    //std::cout << "No path\n";
+	    return Status::kFailure;
+	  }
+	  if (!npc_motor_) {
+	    //std::cout << "No motor\n";
+	    return Status::kFailure;
+	  }
 
-		if (!tilemap_) {
-		  //std::cout << "No tilemap\n";
-		  return Status::kFailure;
-		}
-		if (!path_) {
-			//std::cout << "No path\n";
-			return Status::kFailure;
-		}
-		if (!npc_motor_) {
-			//std::cout << "No motor\n";
-			return Status::kFailure;
-		}
+	  if (stocks_->GetStock(resources::ResourcesType::kFood) >= 10) {
 
-		SetDestination(cantina_position_);
+	    SetDestination(cantina_position_);
 
-		return Status::kSuccess;
+	    return Status::kSuccess;
+	  }
 
-	} else {
-		// std::cout << " : No, I can wait\n";
-		return Status::kFailure;
+	  Status::kFailure;
+          std::cout << "No more food\n";
 	}
+
+	// std::cout << " : No, I can wait\n";
+	return Status::kFailure;
+
 }
 
 Status NpcBehaviourTree::Move() {
@@ -81,12 +86,19 @@ Status NpcBehaviourTree::Eat() {
 	// No failure, until we have food storage system
 	hunger_ -= kEatRate * tick_dt;
 	if (hunger_ > 0) {
-	      std::cout << "Eating !, " << hunger_ << "\n";
-	      return Status::kRunning;
+	  if (stocks_->GetStock(resources::ResourcesType::kFood) >= 10) {
+	    std::cout << "Eating !, " << hunger_ << "\n";
+	    return Status::kRunning;
+	  } else {
+            std::cout << "No more food\n";
+	    Status::kFailure;
+          }
+
 	} else {
 	  stocks_->RemoveStock(resources::ResourcesType::kFood, 10);
 	  return Status::kSuccess;
 	}
+  return Status::kSuccess;
 }
 
 Status NpcBehaviourTree::PickResource() {
@@ -166,4 +178,9 @@ void NpcBehaviourTree::Update(float dt) {
 	bt_root_->Tick();
 	// std::cout << "this ? = " << this << "\n";
 }
+
+float NpcBehaviourTree::GetHunger() {
+  return hunger_;
+}
+
 }  // namespace api::ai

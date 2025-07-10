@@ -35,17 +35,17 @@ void Stock::UpdateDisplay() {
   switch (type_) {
     case ResourcesType::kWood:
       display_.setString("Wood : " + std::to_string(quantity_));
-      display_.setPosition({10, 0});
+      display_.setPosition({15, 10});
       break;
 
     case ResourcesType::kStone:
       display_.setString("Stone : " + std::to_string(quantity_));
-      display_.setPosition({10, 30});
+      display_.setPosition({15, 40});
       break;
 
     case ResourcesType::kFood:
       display_.setString("Food : " + std::to_string(quantity_));
-      display_.setPosition({10, 60});
+      display_.setPosition({15, 70});
       break;
 
     case ResourcesType::kNone:

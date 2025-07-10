@@ -40,6 +40,7 @@ sf::Font font_;
 sf::Text prices_text_(font_, "", 25);
 sf::RectangleShape ui_button_background_;
 sf::RectangleShape ui_resources_background_;
+sf::Texture bg_ui_;
 
 bool ui_ = true;
 bool prices_ = true;
@@ -114,30 +115,43 @@ void Setup() {
   prices_text_.setFont(font_);
   prices_text_.setFillColor(sf::Color::Black);
 
+  if (!bg_ui_.loadFromFile("_assets/sprites/bg_ui.png")) {
+    std::cerr << "Error loading texture bg_ui.png" << std::endl;
+  }
 
-  btn_lumber_ = btn_factory_.CreateButton(sf::Vector2f(100.f, window_.getSize().y - 75.f), "Lumber");
+  ui_button_background_.setTexture(&bg_ui_);
+  ui_button_background_.setSize({ (float)window_.getSize().x, 120.f});
+  ui_button_background_.setOrigin({ ui_button_background_.getSize().x / 2, ui_button_background_.getSize().y / 2});
+  ui_button_background_.setPosition({(float)window_.getSize().x / 2, (float)window_.getSize().y - 60.f});
+
+  ui_resources_background_.setTexture(&bg_ui_);
+  ui_resources_background_.setSize({ 180.f, 120.f});
+  ui_resources_background_.setOrigin({ ui_resources_background_.getSize().x / 2, ui_resources_background_.getSize().y / 2});
+  ui_resources_background_.setPosition({90.f, 60.f});
+
+  btn_lumber_ = btn_factory_.CreateButton(sf::Vector2f(150.f, window_.getSize().y - 75.f), "Lumber");
   btn_lumber_->OnReleasedLeft = []() {
     building_adding_type_ = api::buildings::BuildingsType::kLumber;
   };
-  btn_lumber_->OnHoverEnter = []() { prices_ = true; prices_text_.setString("Wood: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kLumber).x) + ", Stone: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kLumber).y)); prices_text_.setPosition({100.f, window_.getSize().y - 120.f});};
+  btn_lumber_->OnHoverEnter = []() { prices_ = true; prices_text_.setString("Wood: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kLumber).x) + ", Stone: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kLumber).y)); prices_text_.setPosition({150.f, window_.getSize().y - 110.f});};
   btn_lumber_->OnHoverExit = []() { prices_ = false;};
 
-  btn_mine_ = btn_factory_.CreateButton(sf::Vector2f(200.f, window_.getSize().y - 75.f), "Mine");
+  btn_mine_ = btn_factory_.CreateButton(sf::Vector2f(250.f, window_.getSize().y - 75.f), "Mine");
   btn_mine_->OnReleasedLeft = []() {
     building_adding_type_ = api::buildings::BuildingsType::kMine;
   };
-  btn_mine_->OnHoverEnter = []() { prices_ = true; prices_text_.setString("Wood: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kMine).x) + ", Stone: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kMine).y)); prices_text_.setPosition({200.f, window_.getSize().y - 120.f});};
+  btn_mine_->OnHoverEnter = []() { prices_ = true; prices_text_.setString("Wood: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kMine).x) + ", Stone: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kMine).y)); prices_text_.setPosition({250.f, window_.getSize().y - 110.f});};
   btn_mine_->OnHoverExit = []() { prices_ = false;};
 
-  btn_windmill_ = btn_factory_.CreateButton(sf::Vector2f(300.f, window_.getSize().y - 75.f), "Windmill");
+  btn_windmill_ = btn_factory_.CreateButton(sf::Vector2f(350.f, window_.getSize().y - 75.f), "Windmill");
   btn_windmill_->OnReleasedLeft = []() {
     building_adding_type_ = api::buildings::BuildingsType::kWindmill;
   };
-  btn_windmill_->OnHoverEnter = []() { prices_ = true; prices_text_.setString("Wood: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kWindmill).x) + ", Stone: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kWindmill).y)); prices_text_.setPosition({300.f, window_.getSize().y - 120.f});};
+  btn_windmill_->OnHoverEnter = []() { prices_ = true; prices_text_.setString("Wood: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kWindmill).x) + ", Stone: " + std::to_string(buildings_manager_.GetPrice(api::buildings::BuildingsType::kWindmill).y)); prices_text_.setPosition({350.f, window_.getSize().y - 110.f});};
   btn_windmill_->OnHoverExit = []() { prices_ = false;};
 
   btn_clear_ = btn_factory_.CreateButton(
-      sf::Vector2f(window_.getSize().x - 200.f, window_.getSize().y - 75.f), "Clear");
+      sf::Vector2f(window_.getSize().x - 350.f, window_.getSize().y - 75.f), "Clear");
   btn_clear_->OnReleasedLeft = []() {
     for (int i = 0; i < (tilemap_ptr_->GetSize().x * tilemap_ptr_->GetSize().y);
          i++) {
@@ -148,18 +162,8 @@ void Setup() {
     resource_manager_.LoadResources(api::resources::ResourcesType::kStone, tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
   };
 
-  btn_ui_ = btn_factory_.CreateButton(sf::Vector2f(window_.getSize().x - 100.f, window_.getSize().y - 75.f), "Ui");
+  btn_ui_ = btn_factory_.CreateButton(sf::Vector2f(window_.getSize().x - 250.f, window_.getSize().y - 75.f), "Ui");
   btn_ui_->OnReleasedLeft = []() { ui_ = !ui_; };
-
-  ui_button_background_.setFillColor(sf::Color::White);
-  ui_button_background_.setSize({ (float)window_.getSize().x, 120.f});
-  ui_button_background_.setOrigin({ ui_button_background_.getSize().x / 2, ui_button_background_.getSize().y / 2});
-  ui_button_background_.setPosition({(float)window_.getSize().x / 2, (float)window_.getSize().y - 60.f});
-
-  ui_resources_background_.setFillColor(sf::Color::White);
-  ui_resources_background_.setSize({ 180.f, 120.f});
-  ui_resources_background_.setOrigin({ ui_resources_background_.getSize().x / 2, ui_resources_background_.getSize().y / 2});
-  ui_resources_background_.setPosition({90.f, 60.f});
 
   resource_manager_.LoadResources(api::resources::ResourcesType::kWood, tilemap_ptr_->GetCollectibles(TileMap::Tile::kTree), ChopEvent);
   resource_manager_.LoadResources(api::resources::ResourcesType::kFood, tilemap_ptr_->GetCollectibles(TileMap::Tile::kFood), ChopEvent);

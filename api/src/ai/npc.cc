@@ -55,6 +55,10 @@ void Npc::Update(const float dt){
 
   bt_tree_->Update(dt);
 
+  if (bt_tree_->GetHunger() >= 200) {
+    is_dead_ = true;
+  }
+
 }
 
 void Npc::Draw(sf::RenderWindow &window){

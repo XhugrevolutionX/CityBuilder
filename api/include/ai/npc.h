@@ -30,10 +30,13 @@ namespace api::ai {
       std::string name_;
 
     public:
-        void Setup(std::string_view name, std::string_view filename, TileMap* tilemap, sf::Vector2f& cantina_position, ResourceManager* ressources, resources::ResourcesType type, resources::StockManager* stock_manager);
-        void Update(float dt);
 
-        void Draw(sf::RenderWindow &window);
+      bool is_dead_ = false;
+
+      void Setup(std::string_view name, std::string_view filename, TileMap* tilemap, sf::Vector2f& cantina_position, ResourceManager* ressources, resources::ResourcesType type, resources::StockManager* stock_manager);
+      void Update(float dt);
+
+      void Draw(sf::RenderWindow &window);
 
       void SetPosition(const sf::Vector2f& position) {
         motor_->SetPosition(position);

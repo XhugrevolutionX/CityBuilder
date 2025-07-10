@@ -22,6 +22,8 @@ namespace api::ai {
         for (auto& npc : npcs_) {
             npc->Update(dt);
         }
+
+        npcs_.erase(std::remove_if(npcs_.begin(), npcs_.end(),[](const std::unique_ptr<Npc>& npc){return npc->is_dead_;}),npcs_.end());
     }
 
     void NpcManager::Draw(sf::RenderWindow &window){

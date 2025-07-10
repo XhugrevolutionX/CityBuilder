@@ -5,6 +5,7 @@
 #ifndef RESOURCE_MANAGER_H
 #define RESOURCE_MANAGER_H
 #include <memory>
+#include <random>
 #include <ranges>
 #include <vector>
 
@@ -35,25 +36,34 @@ inline void ResourceManager::LoadResources(
 
     resources_.erase(first, last);
 
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distrWood(2, 4);
+    std::uniform_int_distribution<> distrStone(4, 7);
+    std::uniform_int_distribution<> distrFood(3, 6);
+
+
+
+
     for (auto& index : indexes) {
-	    resources_.emplace_back(std::make_shared<api::resources::Resource>());
-	    resources_.back()->SetType(type);
-	    resources_.back()->SetIndex(index);
-	    resources_.back()->OnChopRessource_ = OnChopEvent;
+      resources_.emplace_back(std::make_shared<api::resources::Resource>());
+      resources_.back()->SetType(type);
+      resources_.back()->SetIndex(index);
+      resources_.back()->OnChopRessource_ = OnChopEvent;
 
       switch (type) {
         case api::resources::ResourcesType::kWood:
           resources_.back()->SetQuantity(10);
-          resources_.back()->SetRefillRate(0.3f);
+          resources_.back()->SetRefillRate((float)distrWood(gen) / 10);
           break;
         case api::resources::ResourcesType::kStone:
           resources_.back()->SetQuantity(20);
-          resources_.back()->SetRefillRate(0.5f);
+          resources_.back()->SetRefillRate((float)distrStone(gen) / 10);
 
           break;
         case api::resources::ResourcesType::kFood:
           resources_.back()->SetQuantity(10);
-          resources_.back()->SetRefillRate(0.25f);
+          resources_.back()->SetRefillRate((float)distrFood(gen) / 10);
 
           break;
         case api::resources::ResourcesType::kNone:
