@@ -109,6 +109,7 @@ Status NpcBehaviourTree::PickResource() {
 
 Status NpcBehaviourTree::GetResource() {
 	if (current_ressource_->GetQty() <= 0) {
+	  current_ressource_->cutted_ = true;
 		return Status::kSuccess;
 	}
 

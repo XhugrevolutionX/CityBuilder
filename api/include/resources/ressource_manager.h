@@ -13,11 +13,19 @@
 
 class ResourceManager {
 	std::vector<std::shared_ptr<api::resources::Resource>> resources_;
+	std::vector<int> visited_resources_;
 
    public:
+        void Update(float dt, std::function<void(int index, api::resources::ResourcesType type)> OnGrow_);
 	void LoadResources(api::resources::ResourcesType type, std::vector<int> indexes, std::function<void(int, float, float, api::resources::ResourcesType)> OnChopEvent);
         auto NearExploitableResource(sf::Vector2f pos, api::resources::ResourcesType type);
 };
+
+inline void ResourceManager::Update(float dt, std::function<void(int index, api::resources::ResourcesType type)> OnGrow_) {
+  for (auto& resource : resources_) {
+    resource->Update(dt, OnGrow_);
+  }
+}
 
 inline void ResourceManager::LoadResources(
     api::resources::ResourcesType type, std::vector<int> indexes,
@@ -36,15 +44,22 @@ inline void ResourceManager::LoadResources(
       switch (type) {
         case api::resources::ResourcesType::kWood:
           resources_.back()->SetQuantity(10);
+          resources_.back()->SetRefillRate(0.3f);
           break;
         case api::resources::ResourcesType::kStone:
           resources_.back()->SetQuantity(20);
+          resources_.back()->SetRefillRate(0.5f);
+
           break;
         case api::resources::ResourcesType::kFood:
           resources_.back()->SetQuantity(10);
+          resources_.back()->SetRefillRate(0.25f);
+
           break;
         case api::resources::ResourcesType::kNone:
           resources_.back()->SetQuantity(0);
+          resources_.back()->SetRefillRate(0.f);
+
           break;
         default:
           std::cerr << "Invalid resource type" << std::endl;
