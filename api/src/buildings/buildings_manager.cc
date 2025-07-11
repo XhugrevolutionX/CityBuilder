@@ -12,6 +12,26 @@
 
 namespace api::buildings {
 
+void BuildingsManager::SetupPrices() {
+
+  resources::Prices null_prices;
+  resources::Prices lumber_prices;
+  resources::Prices mine_prices;
+  resources::Prices windmill_prices;
+
+  null_prices.init(0,0,0);
+  lumber_prices.init(50,50,0);
+  mine_prices.init(100, 50,0);
+  windmill_prices.init(200, 100,0);
+
+  prices_.push_back(null_prices);
+  prices_.push_back(lumber_prices);
+  prices_.push_back(mine_prices);
+  prices_.push_back(windmill_prices);
+}
+
+
+
 void BuildingsManager::Add(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager, resources::StockManager* stock_manager){
 
   buildings_.emplace_back();
@@ -31,14 +51,14 @@ void BuildingsManager::Update(float dt) {
 std::pair<int, int> BuildingsManager::GetPrice(BuildingsType type) {
   switch (type) {
     case BuildingsType::kLumber:
-      return {50,50};
+      return prices_[1].GetPrice();
     case BuildingsType::kMine:
-      return {100, 50};
+      return prices_[2].GetPrice();
     case BuildingsType::kWindmill:
-      return {200, 100};
+      return prices_[3].GetPrice();
     case BuildingsType::kNone:
-      return {0,0};
+      return prices_[0].GetPrice();
   }
-  return {0,0};
+  return prices_[0].GetPrice();
 }
 }  // namespace api::buildings

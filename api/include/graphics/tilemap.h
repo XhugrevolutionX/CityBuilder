@@ -68,5 +68,7 @@ public:
     static int GetStep() {return kPixelStep;}
     static sf::Vector2u GetSize() {return {kWidth, kHeight};}
     Tile GetGroundType(int index);
+
+    const sf::Texture &GetBuildingTexture(api::buildings::BuildingsType type);
 };
 #endif

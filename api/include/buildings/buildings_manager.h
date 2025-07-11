@@ -6,6 +6,7 @@
 #define BUILDINGS_MANAGER_H
 
 #include "building.h"
+#include "resources/prices.h"
 
 namespace api::buildings{
 
@@ -19,8 +20,10 @@ enum class BuildingsType {
 class BuildingsManager {
 
   std::vector<Building> buildings_;
+  std::vector<resources::Prices> prices_;
 
 public:
+  void SetupPrices();
   void Add(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager, resources::StockManager* stock_manager);
   void Update(float dt);
   std::pair<int, int> GetPrice(BuildingsType type);

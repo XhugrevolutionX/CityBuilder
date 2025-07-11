@@ -202,9 +202,7 @@ std::vector<sf::Vector2f> TileMap::GetHouses() const {
   return houses;
 }
 
-TileMap::Tile TileMap::GetGroundType(int index) {
-  return tiles_.at(index);
-}
+TileMap::Tile TileMap::GetGroundType(int index) { return tiles_.at(index); }
 
 float TileMap::Distance(sf::Vector2f p1, sf::Vector2f p2) {
   float a,b;
@@ -232,4 +230,28 @@ void TileMap::AddBuilding(sf::Vector2f position, api::buildings::BuildingsType t
     default:
       break;
   }
+}
+
+const sf::Texture& TileMap::GetBuildingTexture(api::buildings::BuildingsType type) {
+
+  Tile t;
+  switch (type) {
+    case api::buildings::BuildingsType::kLumber:
+      t = Tile::kLumber;
+      break;
+    case api::buildings::BuildingsType::kMine:
+      t = Tile::kMine;
+      break;
+    case api::buildings::BuildingsType::kWindmill:
+       t = Tile::kWindmill;
+      break;
+    case api::buildings::BuildingsType::kNone:
+        t = Tile::kEmpty;
+      break;
+    default:
+        t = Tile::kEmpty;
+      break;
+  }
+
+  return textures.Get(t);
 }
