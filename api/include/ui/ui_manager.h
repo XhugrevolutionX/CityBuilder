@@ -29,7 +29,9 @@ class UiManager {
 
   sf::RectangleShape ui_button_background_;
   sf::RectangleShape ui_resources_background_;
-  sf::Texture bg_ui_;
+  sf::Texture bg_stocks_;
+  sf::Texture bg_buttons_;
+
 
   CursorIndicator cursor_indicator_;
 

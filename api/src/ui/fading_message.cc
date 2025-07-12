@@ -14,8 +14,10 @@ FadingMessage::FadingMessage(const sf::Font& font, const std::string& text, sf::
 
 void FadingMessage::Update(float dt) {
   counter_ += dt;
-  text_.setFillColor(sf::Color(color_.r, color_.g, color_.b, color_.a - 255 * (counter_ / time_limit_ )));
+
+  text_.setFillColor(sf::Color(color_.r, color_.g, color_.b, static_cast<uint8_t>(static_cast<float>(color_.a) - 255 * (counter_ / time_limit_))));
   text_.setPosition(text_.getPosition() - sf::Vector2f(0, 20 * dt));
+
   if (counter_ > time_limit_) {
     counter_ = 0.f;
     visible_ = false;

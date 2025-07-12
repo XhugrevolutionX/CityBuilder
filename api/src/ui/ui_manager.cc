@@ -9,7 +9,10 @@
 namespace api::ui {
 
 void UiManager::Setup(sf::RenderWindow& window, buildings::BuildingsManager* buildings_manager, TileMap* tilemap, ResourceManager* resource_manager, std::function<void(int, float, float, resources::ResourcesType)>ChopEvent) {
-  if (!bg_ui_.loadFromFile("_assets/sprites/bg_ui.png")) {
+  if (!bg_stocks_.loadFromFile("_assets/sprites/bg_stocks.png")) {
+    std::cerr << "Error loading texture bg_ui.png" << std::endl;
+  }
+  if (!bg_buttons_.loadFromFile("_assets/sprites/bg_buttons.png")) {
     std::cerr << "Error loading texture bg_ui.png" << std::endl;
   }
 
@@ -17,14 +20,14 @@ void UiManager::Setup(sf::RenderWindow& window, buildings::BuildingsManager* bui
     std::cout << "Failed to load font" << std::endl;
   }
 
-  ui_button_background_.setTexture(&bg_ui_);
+  ui_button_background_.setTexture(&bg_buttons_);
   ui_button_background_.setSize({static_cast<float>(window.getSize().x), 120.f});
   ui_button_background_.setOrigin({ui_button_background_.getSize().x / 2,
                                    ui_button_background_.getSize().y / 2});
   ui_button_background_.setPosition(
       {static_cast<float>(window.getSize().x) / 2, static_cast<float>(window.getSize().y) - 60.f});
 
-  ui_resources_background_.setTexture(&bg_ui_);
+  ui_resources_background_.setTexture(&bg_stocks_);
   ui_resources_background_.setSize({180.f, 120.f});
   ui_resources_background_.setOrigin(
       {ui_resources_background_.getSize().x / 2,
@@ -49,7 +52,7 @@ void UiManager::Setup(sf::RenderWindow& window, buildings::BuildingsManager* bui
   };
 
   btn_mine_ = btn_factory_.CreateLabelButton(
-      sf::Vector2f(250.f, static_cast<float>(window.getSize().y - 75)), "Mine",
+      sf::Vector2f(250.f, static_cast<float>(window.getSize().y) - 75), "Mine",
       "Wood: " +
           std::to_string(
               buildings_manager->GetPrice(buildings::BuildingsType::kMine)
