@@ -102,11 +102,13 @@ void Setup() {
           ui_manager_.building_adding_type_ = api::buildings::BuildingsType::kNone;
           ui_manager_.SetCursorTexture(tilemap_ptr_.get());
         } else {
-          std::cout << "Not Enough Materials" << "\n";
+          ui_manager_.CreateFadingMessage("Not enough materials", sf::Vector2f(sf::Mouse::getPosition(window_)));
+          //std::cout << "Not Enough Materials" << "\n";
         }
       }
       else {
-        std::cout << "Cannot place buildings here" << "\n";
+        ui_manager_.CreateFadingMessage("Cannot place buildings here", sf::Vector2f(sf::Mouse::getPosition(window_)));
+        //std::cout << "Cannot place buildings here" << "\n";
       }
     }
   };
@@ -142,13 +144,11 @@ void Loop() {
       }
     }
 
-    //cursor_indicator_.SetPosition(sf::Vector2f(sf::Mouse::getPosition(window_).x + 10.f, sf::Mouse::getPosition(window_).y + 10.f));
-    ui_manager_.SetCursorPosition(window_);
-
     // GamePlay, physic frame
     npc_manager_.Update(dt);
     buildings_manager_.Update(dt);
     resource_manager_.Update(dt, GrowEvent);
+    ui_manager_.Update(dt, window_);
 
 
     // Graphic frame

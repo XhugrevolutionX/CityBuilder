@@ -10,6 +10,7 @@
 #include "button.h"
 #include "button_factory.h"
 #include "cursor_indicator.h"
+#include "fading_message.h"
 #include "label_button.h"
 
 namespace api::ui {
@@ -32,6 +33,9 @@ class UiManager {
 
   CursorIndicator cursor_indicator_;
 
+  sf::Font font_;
+  std::vector<FadingMessage> fading_messages_;
+
   bool ui_ = true;
 
 public:
@@ -40,7 +44,8 @@ public:
   void Setup(sf::RenderWindow& window, buildings::BuildingsManager* buildings_manager, TileMap* tilemap, ResourceManager* resource_manager, std::function<void(int, float, float, resources::ResourcesType)> ChopEvent);
   void HandleEvents(std::optional<sf::Event> evt, bool &wasClicked);
   void SetCursorTexture(TileMap* tilemap);
-  void SetCursorPosition(sf::RenderWindow& window);
+  void Update(float dt, sf::RenderWindow& window);
+  void CreateFadingMessage(const std::string& text, sf::Vector2f pos);
   void Draw(sf::RenderWindow& window, resources::stock_manager& stock_manager) const;
 
 };
