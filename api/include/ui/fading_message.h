@@ -13,14 +13,15 @@ namespace api::ui {
 class FadingMessage {
 
   sf::Text text_;
+  sf::Color color_;
   float counter_ = 0.f;
-  float time_limit_ = 2.f;
+  float time_limit_ = 1.f;
   bool visible_ = true;
 
 
 public:
 
-  FadingMessage(const sf::Font& font, const std::string& text, sf::Vector2f pos);
+  FadingMessage(const sf::Font& font, const std::string& text, sf::Vector2f pos, sf::Color color);
   void Update(float dt);
   void Draw(sf::RenderWindow& window) const;
   bool Visible() const {return visible_;}

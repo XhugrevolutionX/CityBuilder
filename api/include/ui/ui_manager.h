@@ -45,7 +45,7 @@ public:
   void HandleEvents(std::optional<sf::Event> evt, bool &wasClicked);
   void SetCursorTexture(TileMap* tilemap);
   void Update(float dt, sf::RenderWindow& window);
-  void CreateFadingMessage(const std::string& text, sf::Vector2f pos);
+  void CreateFadingMessage(const std::string& text, sf::Vector2f pos, sf::Color color = sf::Color::Black);
   void Draw(sf::RenderWindow& window, resources::stock_manager& stock_manager) const;
 
 };

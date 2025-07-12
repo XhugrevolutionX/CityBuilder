@@ -134,8 +134,8 @@ void UiManager::Update(float dt, sf::RenderWindow& window) {
 
   cursor_indicator_.SetPosition(sf::Vector2f(static_cast<float>(sf::Mouse::getPosition(window).x + 10),static_cast<float>(sf::Mouse::getPosition(window).y + 10)));
 }
-void UiManager::CreateFadingMessage(const std::string& text, sf::Vector2f pos) {
-  fading_messages_.emplace_back(font_, text, pos);
+void UiManager::CreateFadingMessage(const std::string& text, sf::Vector2f pos, sf::Color color) {
+  fading_messages_.emplace_back(font_, text, pos, color);
 }
 
 void UiManager::Draw(sf::RenderWindow& window, resources::stock_manager& stock_manager) const {
