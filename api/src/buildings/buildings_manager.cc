@@ -32,7 +32,7 @@ void BuildingsManager::SetupPrices() {
 
 
 
-void BuildingsManager::Add(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager, resources::StockManager* stock_manager){
+void BuildingsManager::Add(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager, resources::stock_manager* stock_manager){
 
   buildings_.emplace_back();
   tilemap->AddBuilding(position, type);

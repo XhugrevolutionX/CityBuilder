@@ -50,7 +50,7 @@ inline void Resource::Update(float dt, std::function<void(int index, ResourcesTy
   if (cutted_) {
     if (growth_ < total_quantity_) {
       growth_ += dt * refill_rate_;
-      std::cout << "refill " << growth_ << "\n";
+      //std::cout << "refill " << growth_ << "\n";
     }
     else {
       growth_ = 0;

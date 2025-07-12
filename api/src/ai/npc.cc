@@ -12,7 +12,7 @@
 
 using namespace api::ai;
 
-void Npc::Setup(std::string_view name, std::string_view filename, TileMap* tilemap, sf::Vector2f& cantina_position, ResourceManager* ressources, resources::ResourcesType type, resources::StockManager* stock_manager) {
+void Npc::Setup(std::string_view name, std::string_view filename, TileMap* tilemap, sf::Vector2f& cantina_position, ResourceManager* ressources, resources::ResourcesType type, resources::stock_manager* stock_manager) {
 
   #ifdef TRACY_ENABLE
     ZoneScoped;

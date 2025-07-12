@@ -141,7 +141,7 @@ Status NpcBehaviourTree::Idle() {
 	return Status::kSuccess;
 }
 
-void NpcBehaviourTree::SetupBehaviourTree(Motor* npc_motor, Path* path, TileMap* tilemap, sf::Vector2f cantina_position, ResourceManager* ressources, resources::ResourcesType type, resources::StockManager* stock_manager) {
+void NpcBehaviourTree::SetupBehaviourTree(Motor* npc_motor, Path* path, TileMap* tilemap, sf::Vector2f cantina_position, ResourceManager* ressources, resources::ResourcesType type, resources::stock_manager* stock_manager) {
 	//std::cout << "Setup Behaviour Tree\n";
 
 	hunger_ = 0;

@@ -24,7 +24,7 @@ class BuildingsManager {
 
 public:
   void SetupPrices();
-  void Add(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager, resources::StockManager* stock_manager);
+  void Add(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager, resources::stock_manager* stock_manager);
   void Update(float dt);
   std::pair<int, int> GetPrice(BuildingsType type);
 

@@ -15,7 +15,7 @@
 
 namespace api::resources {
 
-class StockManager {
+class stock_manager {
 
   Stock wood_ ;
   Stock stone_;
@@ -27,7 +27,7 @@ class StockManager {
 
   public:
 
-  StockManager();
+  stock_manager();
 
   int GetStock(ResourcesType type);
   void AddStock(ResourcesType type, int quantity);
@@ -37,9 +37,9 @@ class StockManager {
 
 };
 
-inline StockManager::StockManager() : wood_(ResourcesType::kWood, 200), stone_(ResourcesType::kStone, 100), food_(ResourcesType::kFood, 100) {}
+inline stock_manager::stock_manager() : wood_(ResourcesType::kWood, 150), stone_(ResourcesType::kStone, 100), food_(ResourcesType::kFood, 100) {}
 
-inline void StockManager::SelectStock(ResourcesType type) {
+inline void stock_manager::SelectStock(ResourcesType type) {
 
   switch (type) {
     case ResourcesType::kWood:
@@ -57,27 +57,27 @@ inline void StockManager::SelectStock(ResourcesType type) {
   }
 }
 
-inline int StockManager::GetStock(ResourcesType type) {
+inline int stock_manager::GetStock(ResourcesType type) {
 
   SelectStock(type);
   return selected_->GetQuantity();
 
 }
 
-inline void StockManager::AddStock(ResourcesType type, int quantity) {
+inline void stock_manager::AddStock(ResourcesType type, int quantity) {
 
   SelectStock(type);
   selected_->AddQuantity(quantity);
 }
 
-inline void StockManager::RemoveStock(ResourcesType type, int quantity) {
+inline void stock_manager::RemoveStock(ResourcesType type, int quantity) {
 
   SelectStock(type);
   selected_->RemoveQuantity(quantity);
 }
 
 
-inline void StockManager::Draw(sf::RenderWindow &window) const {
+inline void stock_manager::Draw(sf::RenderWindow &window) const {
   #ifdef TRACY_ENABLE
     ZoneScoped;
   #endif //TRACY_ENBALE
