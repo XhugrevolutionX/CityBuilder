@@ -54,7 +54,7 @@ Status NpcBehaviourTree::CheckHunger() {
 	  }
 
 	  Status::kFailure;
-          std::cout << "No more food\n";
+          //std::cout << "No more food\n";
 	}
 
 	// std::cout << " : No, I can wait\n";
@@ -87,10 +87,10 @@ Status NpcBehaviourTree::Eat() {
 	hunger_ -= kEatRate * tick_dt;
 	if (hunger_ > 0) {
 	  if (stocks_->GetStock(resources::ResourcesType::kFood) >= 10) {
-	    std::cout << "Eating !, " << hunger_ << "\n";
+	    //std::cout << "Eating !, " << hunger_ << "\n";
 	    return Status::kRunning;
 	  } else {
-            std::cout << "No more food\n";
+            //std::cout << "No more food\n";
 	    Status::kFailure;
           }
 
@@ -127,17 +127,17 @@ Status NpcBehaviourTree::GetResource() {
 
 	current_ressource_->Exploit(kExploitRate * tick_dt);
 	hunger_ += kHungerRate * tick_dt;
-        std::cout << "Working !, ";
-        std::cout << "Hunger : " << hunger_ << ", ";
-        std::cout << "Quantity : " << current_ressource_->GetQty() << ", ";
-        std::cout << "Resource Position : " << TileMap::ScreenPosition(current_ressource_->GetTileIndex()).x << ":" << TileMap::ScreenPosition(current_ressource_->GetTileIndex()).y << ", ";
-        std::cout << "type : " << static_cast<int>(current_ressource_->GetType()) << std::endl;
+        //std::cout << "Working !, ";
+        //std::cout << "Hunger : " << hunger_ << ", ";
+        //std::cout << "Quantity : " << current_ressource_->GetQty() << ", ";
+        //std::cout << "Resource Position : " << TileMap::ScreenPosition(current_ressource_->GetTileIndex()).x << ":" << TileMap::ScreenPosition(current_ressource_->GetTileIndex()).y << ", ";
+        //std::cout << "type : " << static_cast<int>(current_ressource_->GetType()) << std::endl;
 	return Status::kRunning;
 }
 
 Status NpcBehaviourTree::Idle() {
 	hunger_ += kHungerRate * tick_dt;
-	std::cout << "I'm sleeping" << "\n";
+	//std::cout << "I'm sleeping" << "\n";
 	return Status::kSuccess;
 }
 

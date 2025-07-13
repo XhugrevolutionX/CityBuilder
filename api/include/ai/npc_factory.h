@@ -33,7 +33,7 @@ namespace api::ai {
                 npc->Setup("Purple","character_purple.png", tilemap, start_position, ressource_manager, resources::ResourcesType::kNone, stock_manager);
                 break;
             default:
-                std::cout << "Error: Npc type not found" << std::endl;
+                std::cerr << "Error: Npc type not found" << std::endl;
                 break;
         }
 

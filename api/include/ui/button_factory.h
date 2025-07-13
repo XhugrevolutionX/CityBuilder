@@ -28,7 +28,7 @@ namespace api::ui {
         ButtonFactory(){
             textures_.Load(files_);
             if (!font.openFromFile("_assets/fonts/ANTQUAB.TTF")) {
-                std::cout << "Failed to load font" << std::endl;
+                std::cerr << "Failed to load font" << std::endl;
             }
         }
 

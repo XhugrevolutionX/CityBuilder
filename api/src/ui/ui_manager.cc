@@ -9,6 +9,7 @@
 namespace api::ui {
 
 void UiManager::Setup(sf::RenderWindow& window, buildings::BuildingsManager* buildings_manager, resources::StockManager* stock_manager, TileMap* tilemap, ResourceManager* resource_manager, std::function<void(int, float, float, resources::ResourcesType)>ChopEvent) {
+  //Load the textures
   if (!bg_stocks_.loadFromFile("_assets/sprites/bg_stocks.png")) {
     std::cerr << "Error loading texture bg_stocks.png" << std::endl;
   }
@@ -20,7 +21,7 @@ void UiManager::Setup(sf::RenderWindow& window, buildings::BuildingsManager* bui
   }
 
   if (!font_.openFromFile("_assets/fonts/ANTQUAB.TTF")) {
-    std::cout << "Failed to load font" << std::endl;
+    std::cerr << "Failed to load font" << std::endl;
   }
 
   // Create the backgrounds
@@ -39,7 +40,7 @@ void UiManager::Setup(sf::RenderWindow& window, buildings::BuildingsManager* bui
   ui_resources_background_.setOrigin({ui_resources_background_.getSize().x / 2, ui_resources_background_.getSize().y / 2});
   ui_resources_background_.setPosition({90.f, 60.f});
 
-  // Create the gameplay buttons and attach their click behaviors
+  // Create the gameplay buttons
   btn_lumber_ = btn_factory_.CreateLabelButton(sf::Vector2f(150.f, static_cast<float>(window.getSize().y - 75)), "Lumber","Wood: " + std::to_string(buildings_manager->GetPrice(buildings::BuildingsType::kLumber).first) +", Stone: " +std::to_string(buildings_manager->GetPrice(buildings::BuildingsType::kLumber).second));
   btn_lumber_->OnReleasedLeft = [this, tilemap]()
   {
@@ -71,8 +72,7 @@ void UiManager::Setup(sf::RenderWindow& window, buildings::BuildingsManager* bui
   btn_ui_ = btn_factory_.CreateButton(sf::Vector2f(static_cast<float>(window.getSize().x - 250), static_cast<float>(window.getSize().y - 75)),"Ui");
   btn_ui_->OnReleasedLeft = [this]() { ui_ = !ui_; };
 
-  // Create the dev buttons and attach their click behaviors
-
+  // Create the dev buttons
   btn_dev_ui_ = btn_factory_.CreateButton(sf::Vector2f(window.getSize().x - 350.f, window.getSize().y - 75.f),"Dev");
   btn_dev_ui_->OnReleasedLeft = [this]() {dev_ui_ = !dev_ui_;};
 
@@ -102,7 +102,7 @@ void UiManager::Setup(sf::RenderWindow& window, buildings::BuildingsManager* bui
     resource_manager->LoadResources(api::resources::ResourcesType::kStone, tilemap->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
   };
 
-  //Give Amount Text
+  //Create give amount text
   give_amount_text_.setFont(font_);
   give_amount_text_.setString("Give Amount: " + std::to_string(give_amount));
   give_amount_text_.setCharacterSize(12);
@@ -111,6 +111,7 @@ void UiManager::Setup(sf::RenderWindow& window, buildings::BuildingsManager* bui
 
 }
 void UiManager::HandleEvents(std::optional<sf::Event> evt, bool &wasClicked) {
+  //Handle the events depending on the ui state
   if (ui_) {
     btn_mine_->HandleEvent(evt, wasClicked);
     btn_lumber_->HandleEvent(evt, wasClicked);
@@ -153,7 +154,7 @@ void UiManager::CreateFadingMessage(const std::string& text, sf::Vector2f pos, s
 }
 
 void UiManager::Draw(sf::RenderWindow& window, resources::StockManager& stock_manager) const {
-
+  //Draw the ui elements depending on the ui state
   if (ui_) {
 
     for (auto& fading_message : fading_messages_) {

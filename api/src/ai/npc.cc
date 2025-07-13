@@ -22,13 +22,13 @@ void Npc::Setup(std::string_view name, std::string_view filename, TileMap* tilem
 
   // TODO : find lighter concat for string view
   if(!texture_.loadFromFile("_assets/sprites/" + std::string(filename))) {
-    std::cout << "Error loading texture " << filename << std::endl;
+    std::cerr << "Error loading texture " << filename << std::endl;
     if (!texture_.loadFromFile("_assets/sprites/empty.png")) {
-      std::cout << "Error loading texture empty.png" << std::endl;
+      std::cerr << "Error loading texture empty.png" << std::endl;
     }
   }
 
-  std::cout << "Setup " << name_ << " -- -- -- -- -- -- -- -- -- -- -- -- -- " << std::endl;
+  //std::cout << "Setup " << name_ << " -- -- -- -- -- -- -- -- -- -- -- -- -- " << std::endl;
 
   bt_tree_->SetupBehaviourTree(motor_.get(), path_.get(), tilemap, cantina_position, ressources, type, stock_manager);
 

@@ -87,7 +87,6 @@ void TileMap::Setup(){
        }
     }
 
-
   SetZone(sf::IntRect({0, 0}, sf::Vector2i(kWidth, kHeight)));
 }
 

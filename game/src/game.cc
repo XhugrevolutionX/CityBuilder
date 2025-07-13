@@ -74,7 +74,6 @@ void Setup() {
   resource_manager_.LoadResources(api::resources::ResourcesType::kFood, tilemap_ptr_->GetCollectibles(TileMap::Tile::kFood), ChopEvent);
   resource_manager_.LoadResources(api::resources::ResourcesType::kStone, tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
 
-
   // Create the main window
   {
 #ifdef TRACY_ENABLE
@@ -82,6 +81,7 @@ void Setup() {
 #endif  // TRACY_ENABLE
     window_.create(sf::VideoMode({TileMap::GetSize()}), "SFML window");
   }
+
 
   //Setup prices for the buildings
   buildings_manager_.SetupPrices();
@@ -91,7 +91,7 @@ void Setup() {
 
   //Attach click behavior to the tilemap
   tilemap_ptr_->OnReleasedLeft = []() {
-    std::cout << "Clicked tilemap" << "\n";
+    //std::cout << "Clicked tilemap" << "\n";
     if (ui_manager_.building_adding_type_ != api::buildings::BuildingsType::kNone) {
       if (tilemap_ptr_->GetGroundType(TileMap::Index(TileMap::TilePos(sf::Mouse::getPosition(window_)))) == TileMap::Tile::kGrass && tilemap_ptr_->GetBuilding(TileMap::Index(TileMap::TilePos(sf::Mouse::getPosition(window_)))) == TileMap::Tile::kEmpty) {
         if (buildings_manager_.GetPrice(ui_manager_.building_adding_type_).first <= stock_manager_.GetStock(api::resources::ResourcesType::kWood) && buildings_manager_.GetPrice(ui_manager_.building_adding_type_).second <= stock_manager_.GetStock(api::resources::ResourcesType::kStone)) {
