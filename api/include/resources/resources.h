@@ -86,7 +86,15 @@ inline float Resource::GetQty() const {
 
 
 inline void Resource::Exploit(float rate) {
-  quantity_ -= rate;
+  if (type_ == ResourcesType::kFood)
+  {
+    quantity_ -= rate / 2;
+  }
+  else
+    {
+    quantity_ -= rate;
+
+  }
   quantity_ = std::max<float>(quantity_, 0);
 
   if (OnChopRessource_) {

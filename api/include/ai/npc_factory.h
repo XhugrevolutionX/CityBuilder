@@ -12,7 +12,7 @@
 #endif // TRACY_ENABLE
 
 namespace api::ai {
-    inline void CreateNpc(std::vector<std::unique_ptr<Npc>> &npcs, const NpcType type, sf::Vector2f& start_position, TileMap* tilemap, ResourceManager* ressource_manager, resources::stock_manager* stock_manager){
+    inline void CreateNpc(std::vector<std::unique_ptr<Npc>> &npcs, const NpcType type, sf::Vector2f& start_position, TileMap* tilemap, ResourceManager* ressource_manager, resources::StockManager* stock_manager){
 
       #ifdef TRACY_ENABLE
       ZoneScoped;

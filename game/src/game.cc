@@ -4,7 +4,7 @@
 #include "ai/npc_manager.h"
 #include "buildings/buildings_manager.h"
 #include "graphics/tilemap.h"
-#include "resources/stock_manager.h"
+#include "resources/StockManager.h"
 #include "ui/button_factory.h"
 #include "ui/cursor_indicator.h"
 #include "ui/ui_manager.h"
@@ -25,7 +25,7 @@ auto tilemap_ptr_ = std::make_unique<TileMap>();
 api::ai::NpcManager npc_manager_;
 api::buildings::BuildingsManager buildings_manager_;
 ResourceManager resource_manager_;
-api::resources::stock_manager stock_manager_;
+api::resources::StockManager stock_manager_;
 
 api::ui::UiManager ui_manager_;
 
@@ -87,13 +87,13 @@ void Setup() {
   buildings_manager_.SetupPrices();
 
   //Setup Ui
-  ui_manager_.Setup(window_, &buildings_manager_, tilemap_ptr_.get(), &resource_manager_, ChopEvent);
+  ui_manager_.Setup(window_, &buildings_manager_, &stock_manager_, tilemap_ptr_.get(), &resource_manager_, ChopEvent);
 
   //Attach click behavior to the tilemap
   tilemap_ptr_->OnReleasedLeft = []() {
     std::cout << "Clicked tilemap" << "\n";
     if (ui_manager_.building_adding_type_ != api::buildings::BuildingsType::kNone) {
-      if (tilemap_ptr_->GetGroundType(TileMap::Index(TileMap::TilePos(sf::Mouse::getPosition(window_)))) == TileMap::Tile::kGrass) {
+      if (tilemap_ptr_->GetGroundType(TileMap::Index(TileMap::TilePos(sf::Mouse::getPosition(window_)))) == TileMap::Tile::kGrass && tilemap_ptr_->GetBuilding(TileMap::Index(TileMap::TilePos(sf::Mouse::getPosition(window_)))) == TileMap::Tile::kEmpty) {
         if (buildings_manager_.GetPrice(ui_manager_.building_adding_type_).first <= stock_manager_.GetStock(api::resources::ResourcesType::kWood) && buildings_manager_.GetPrice(ui_manager_.building_adding_type_).second <= stock_manager_.GetStock(api::resources::ResourcesType::kStone)) {
 
           stock_manager_.RemoveStock(api::resources::ResourcesType::kWood, buildings_manager_.GetPrice(ui_manager_.building_adding_type_).first);

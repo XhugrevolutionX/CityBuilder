@@ -181,25 +181,9 @@ sf::Vector2f TileMap::TilePos(sf::Vector2i pos) {
 
 }
 
-std::vector<sf::Vector2f> NearResources(api::resources::ResourcesType type, sf::Vector2f pos, sf::Vector2f dist) {
-  return std::vector<sf::Vector2f> {};
-}
 
-
-std::vector<sf::Vector2f> TileMap::GetHouses() const {
-  std::vector<sf::Vector2f> houses;
-  int tileIndex = 0;
-  for (auto element : ressources_) {
-    if (element == Tile::kMaison || element == Tile::kLumber ||
-        element == Tile::kMine || element == Tile::kWindmill) {
-      houses.emplace_back(ScreenPosition(tileIndex));
-    }
-    tileIndex++;
-  }
-  if (houses.empty()) {
-    return std::vector<sf::Vector2f>();
-  }
-  return houses;
+TileMap::Tile TileMap::GetBuilding(int index) const {
+ return buildings_.at(index);
 }
 
 TileMap::Tile TileMap::GetGroundType(int index) { return tiles_.at(index); }

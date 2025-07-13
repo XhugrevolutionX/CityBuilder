@@ -58,13 +58,12 @@ public:
     void Draw(sf::RenderWindow &window);
     void SetResourcesTile(int, Tile);
     void SetTile(int, Tile);
-    std::vector<sf::Vector2f> NearResources(api::resources::ResourcesType type, sf::Vector2f pos, sf::Vector2f dist);
 
     void AddBuilding(sf::Vector2f position, api::buildings::BuildingsType type);
 
     std::vector<sf::Vector2f> GetWalkables() const;
     std::vector<int> GetCollectibles(Tile);
-    std::vector<sf::Vector2f> GetHouses() const;
+    Tile GetBuilding(int index) const;
     static int GetStep() {return kPixelStep;}
     static sf::Vector2u GetSize() {return {kWidth, kHeight};}
     Tile GetGroundType(int index);
