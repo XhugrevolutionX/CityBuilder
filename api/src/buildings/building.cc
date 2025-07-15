@@ -39,6 +39,5 @@ void Building::SummonNpc() {
     default :
       break;
   }
-
 }
 }

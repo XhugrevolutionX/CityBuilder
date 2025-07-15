@@ -37,6 +37,7 @@ class UiManager {
   std::unique_ptr<Button> btn_sub_give_amount;
   int give_amount = 10;
   sf::Text give_amount_text_;
+  sf::Text dev_title_text_;
 
   // Backgrounds
   sf::RectangleShape ui_button_background_;
@@ -53,14 +54,13 @@ class UiManager {
   sf::Font font_;
   std::vector<FadingMessage> fading_messages_;
 
-
   bool ui_ = true;
   bool dev_ui_ = false;
 
 public:
   buildings::BuildingsType building_adding_type_ = buildings::BuildingsType::kNone;
 
-  UiManager(): give_amount_text_(font_) {};
+  UiManager(): give_amount_text_(font_), dev_title_text_(font_) {};
 
   void Setup(sf::RenderWindow& window, buildings::BuildingsManager* buildings_manager, resources::StockManager* stock_manager, TileMap* tilemap, ResourceManager* resource_manager, std::function<void(int, float, float, resources::ResourcesType)> ChopEvent);
   void HandleEvents(std::optional<sf::Event> evt, bool &wasClicked);

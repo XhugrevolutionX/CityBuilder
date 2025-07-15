@@ -4,7 +4,6 @@
 #include "ai/npc_manager.h"
 #include "buildings/buildings_manager.h"
 #include "graphics/tilemap.h"
-#include "resources/StockManager.h"
 #include "ui/button_factory.h"
 #include "ui/cursor_indicator.h"
 #include "ui/ui_manager.h"
@@ -26,7 +25,6 @@ api::ai::NpcManager npc_manager_;
 api::buildings::BuildingsManager buildings_manager_;
 ResourceManager resource_manager_;
 api::resources::StockManager stock_manager_;
-
 api::ui::UiManager ui_manager_;
 
 //Events
@@ -51,9 +49,6 @@ void GrowEvent(int index, api::resources::ResourcesType type) {
       break;
     case api::resources::ResourcesType::kStone:
       tilemap_ptr_->SetResourcesTile(index, TileMap::Tile::kRock);
-      break;
-    case api::resources::ResourcesType::kNone:
-      tilemap_ptr_->SetResourcesTile(index, TileMap::Tile::kEmpty);
       break;
     default:
       tilemap_ptr_->SetResourcesTile(index, TileMap::Tile::kEmpty);
@@ -148,7 +143,6 @@ void Loop() {
 
     // GamePlay, physic frame
     npc_manager_.Update(dt);
-    buildings_manager_.Update(dt);
     resource_manager_.Update(dt, GrowEvent);
     ui_manager_.Update(dt, window_);
 

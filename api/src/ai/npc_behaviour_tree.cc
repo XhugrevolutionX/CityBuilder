@@ -86,15 +86,18 @@ Status NpcBehaviourTree::Eat() {
 	// No failure, until we have food storage system
 	hunger_ -= kEatRate * tick_dt;
 	if (hunger_ > 0) {
-	  if (stocks_->GetStock(resources::ResourcesType::kFood) >= 10) {
+	  if (stocks_->GetStock(resources::ResourcesType::kFood) >= 10)
+	  {
 	    //std::cout << "Eating !, " << hunger_ << "\n";
 	    return Status::kRunning;
-	  } else {
-            //std::cout << "No more food\n";
+	  }
+	  else
+	  {
+	    //std::cout << "No more food\n";
 	    Status::kFailure;
-          }
-
-	} else {
+	  }
+	} else
+	{
 	  stocks_->RemoveStock(resources::ResourcesType::kFood, 10);
 	  return Status::kSuccess;
 	}

@@ -22,7 +22,12 @@ Stock::Stock(ResourcesType type, int quantity) : display_(font_) {
 int Stock::GetQuantity() const {return quantity_;}
 
 void Stock::AddQuantity(int quantity) {
-  quantity_ += quantity;
+  if (quantity_ + quantity < 0) {
+    quantity_ = 0;
+  }
+  else {
+    quantity_ += quantity;
+  }
   UpdateDisplay();
 }
 

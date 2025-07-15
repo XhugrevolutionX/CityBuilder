@@ -8,7 +8,7 @@
 
 namespace api::ui {
 
-void UiManager::Setup(sf::RenderWindow& window, buildings::BuildingsManager* buildings_manager, resources::StockManager* stock_manager, TileMap* tilemap, ResourceManager* resource_manager, std::function<void(int, float, float, resources::ResourcesType)>ChopEvent) {
+void UiManager::Setup(sf::RenderWindow& window, buildings::BuildingsManager* buildings_manager, resources::StockManager* stock_manager, TileMap* tilemap, ResourceManager* resource_manager,std::function<void(int, float, float, resources::ResourcesType)>ChopEvent) {
   //Load the textures
   if (!bg_stocks_.loadFromFile("_assets/sprites/bg_stocks.png")) {
     std::cerr << "Error loading texture bg_stocks.png" << std::endl;
@@ -19,12 +19,11 @@ void UiManager::Setup(sf::RenderWindow& window, buildings::BuildingsManager* bui
   if (!bg_dev_buttons_.loadFromFile("_assets/sprites/bg_dev_buttons.png")) {
     std::cerr << "Error loading texture bg_dev_buttons.png" << std::endl;
   }
-
   if (!font_.openFromFile("_assets/fonts/ANTQUAB.TTF")) {
     std::cerr << "Failed to load font" << std::endl;
   }
 
-  // Create the backgrounds
+  // Create the ui backgrounds
   ui_button_background_.setTexture(&bg_buttons_);
   ui_button_background_.setSize({static_cast<float>(window.getSize().x), 120.f});
   ui_button_background_.setOrigin({ui_button_background_.getSize().x / 2, ui_button_background_.getSize().y / 2});
@@ -48,14 +47,14 @@ void UiManager::Setup(sf::RenderWindow& window, buildings::BuildingsManager* bui
     cursor_indicator_.SetTexture(tilemap->GetBuildingTexture(building_adding_type_));
   };
 
-  btn_mine_ = btn_factory_.CreateLabelButton(sf::Vector2f(250.f, static_cast<float>(window.getSize().y) - 75), "Mine","Wood: " +std::to_string(buildings_manager->GetPrice(buildings::BuildingsType::kMine).first) +", Stone: " +std::to_string(buildings_manager->GetPrice(buildings::BuildingsType::kMine).second));
+  btn_mine_ = btn_factory_.CreateLabelButton(sf::Vector2f(250.f, static_cast<float>(window.getSize().y) - 75), "Mine","Wood: " + std::to_string(buildings_manager->GetPrice(buildings::BuildingsType::kMine).first) +", Stone: " +std::to_string(buildings_manager->GetPrice(buildings::BuildingsType::kMine).second));
   btn_mine_->OnReleasedLeft = [this, tilemap]()
   {
     building_adding_type_ = api::buildings::BuildingsType::kMine;
     cursor_indicator_.SetTexture(tilemap->GetBuildingTexture(building_adding_type_));
   };
 
-  btn_windmill_ = btn_factory_.CreateLabelButton(sf::Vector2f(350.f, static_cast<float>(window.getSize().y - 75)), "Windmill","Wood: " +std::to_string(buildings_manager->GetPrice(buildings::BuildingsType::kWindmill).first) +", Stone: " +std::to_string(buildings_manager->GetPrice(buildings::BuildingsType::kWindmill).second));
+  btn_windmill_ = btn_factory_.CreateLabelButton(sf::Vector2f(350.f, static_cast<float>(window.getSize().y - 75)), "Windmill","Wood: " + std::to_string(buildings_manager->GetPrice(buildings::BuildingsType::kWindmill).first) +", Stone: " +std::to_string(buildings_manager->GetPrice(buildings::BuildingsType::kWindmill).second));
   btn_windmill_->OnReleasedLeft = [this, tilemap]()
   {
     building_adding_type_ = api::buildings::BuildingsType::kWindmill;
@@ -73,41 +72,47 @@ void UiManager::Setup(sf::RenderWindow& window, buildings::BuildingsManager* bui
   btn_ui_->OnReleasedLeft = [this]() { ui_ = !ui_; };
 
   // Create the dev buttons
-  btn_dev_ui_ = btn_factory_.CreateButton(sf::Vector2f(window.getSize().x - 350.f, window.getSize().y - 75.f),"Dev");
+  btn_dev_ui_ = btn_factory_.CreateButton(sf::Vector2f(static_cast<float>(window.getSize().x) - 350.f, static_cast<float>(window.getSize().y) - 75.f),"Dev");
   btn_dev_ui_->OnReleasedLeft = [this]() {dev_ui_ = !dev_ui_;};
 
-  btn_give_wood = btn_factory_.CreateButton(sf::Vector2f(window.getSize().x - 125.f, 25.f),"add wood");
+  btn_give_wood = btn_factory_.CreateButton(sf::Vector2f(static_cast<float>(window.getSize().x) - 125.f, 75.f),"Wood");
   btn_give_wood->OnReleasedLeft = [this, stock_manager]() {stock_manager->AddStock(resources::ResourcesType::kWood, give_amount);};
 
-  btn_give_stone = btn_factory_.CreateButton(sf::Vector2f(window.getSize().x - 125.f, 75.f),"add stone");
+  btn_give_stone = btn_factory_.CreateButton(sf::Vector2f(static_cast<float>(window.getSize().x) - 125.f, 125.f),"Stone");
   btn_give_stone->OnReleasedLeft = [this, stock_manager]() {stock_manager->AddStock(resources::ResourcesType::kStone, give_amount);};
 
-  btn_give_food = btn_factory_.CreateButton(sf::Vector2f(window.getSize().x - 125.f, 125.f),"add food");
+  btn_give_food = btn_factory_.CreateButton(sf::Vector2f(static_cast<float>(window.getSize().x) - 125.f, 175.f),"Food");
   btn_give_food->OnReleasedLeft = [this, stock_manager]() {stock_manager->AddStock(resources::ResourcesType::kFood, give_amount);};
 
-  btn_add_give_amount = btn_factory_.CreateButton(sf::Vector2f(window.getSize().x - 125.f, 225.f),"give +10");
+  btn_add_give_amount = btn_factory_.CreateButton(sf::Vector2f(static_cast<float>(window.getSize().x) - 125.f, 275.f),"give +10");
   btn_add_give_amount->OnReleasedLeft = [this]() {give_amount += 10;};
 
-  btn_sub_give_amount = btn_factory_.CreateButton(sf::Vector2f(window.getSize().x - 125.f, 275.f),"give -10");
-  btn_sub_give_amount->OnReleasedLeft = [this]() {if (give_amount > 10) give_amount -= 10; else give_amount = 10;};
+  btn_sub_give_amount = btn_factory_.CreateButton(sf::Vector2f(static_cast<float>(window.getSize().x) - 125.f, 325.f),"give -10");
+  btn_sub_give_amount->OnReleasedLeft = [this]() {give_amount -= 10;};
 
-  btn_clear_ = btn_factory_.CreateButton(sf::Vector2f(window.getSize().x - 125.f, 375.f),"Clear");
+  btn_clear_ = btn_factory_.CreateButton(sf::Vector2f(static_cast<float>(window.getSize().x) - 125.f, 375.f),"Clear");
   btn_clear_->OnReleasedLeft = [tilemap, resource_manager, ChopEvent]() {
-    for (int i = 0; i < (tilemap->GetSize().x * tilemap->GetSize().y);
+    for (int i = 0; i < (TileMap::GetSize().x * TileMap::GetSize().y);
          i++) {
       tilemap->SetResourcesTile(i, TileMap::Tile::kEmpty);
     }
-    resource_manager->LoadResources(api::resources::ResourcesType::kWood, tilemap->GetCollectibles(TileMap::Tile::kTree), ChopEvent);
-    resource_manager->LoadResources(api::resources::ResourcesType::kFood, tilemap->GetCollectibles(TileMap::Tile::kFood), ChopEvent);
-    resource_manager->LoadResources(api::resources::ResourcesType::kStone, tilemap->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
+    resource_manager->LoadResources(resources::ResourcesType::kWood, tilemap->GetCollectibles(TileMap::Tile::kTree), ChopEvent);
+    resource_manager->LoadResources(resources::ResourcesType::kFood, tilemap->GetCollectibles(TileMap::Tile::kFood), ChopEvent);
+    resource_manager->LoadResources(resources::ResourcesType::kStone, tilemap->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
   };
 
-  //Create give amount text
+  //Create text
   give_amount_text_.setFont(font_);
   give_amount_text_.setString("Give Amount: " + std::to_string(give_amount));
   give_amount_text_.setCharacterSize(12);
   give_amount_text_.setFillColor(sf::Color::Black);
-  give_amount_text_.setPosition(sf::Vector2f(window.getSize().x - 125.f, 175.f));
+  give_amount_text_.setPosition(sf::Vector2f(static_cast<float>(window.getSize().x) - 125.f, 225.f));
+
+  dev_title_text_.setFont(font_);
+  dev_title_text_.setString("Dev Menu \n (Give Resources)");
+  dev_title_text_.setCharacterSize(12);
+  dev_title_text_.setFillColor(sf::Color::Black);
+  dev_title_text_.setPosition(sf::Vector2f(static_cast<float>(window.getSize().x) - 125.f, 25.f));
 
 }
 void UiManager::HandleEvents(std::optional<sf::Event> evt, bool &wasClicked) {
@@ -175,6 +180,7 @@ void UiManager::Draw(sf::RenderWindow& window, resources::StockManager& stock_ma
 
     if (dev_ui_) {
       window.draw(ui_dev_button_background_);
+      window.draw(dev_title_text_);
       btn_give_wood->Draw(window);
       btn_give_stone->Draw(window);
       btn_give_food->Draw(window);

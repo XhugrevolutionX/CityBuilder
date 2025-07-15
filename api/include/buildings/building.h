@@ -24,6 +24,7 @@ public:
   void Setup(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager, resources::StockManager* stock_manager);
   void Update(float dt);
   void SummonNpc();
+  BuildingsType GetType() const { return type_; }
 
 };}
 
