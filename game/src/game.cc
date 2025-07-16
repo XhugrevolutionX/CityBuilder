@@ -33,7 +33,7 @@ void ChopEvent(int index, float total_quantity, float quantity, api::resources::
   if (quantity <= 0) {
     tilemap_ptr_->SetResourcesTile(index, TileMap::Tile::kEmpty);
 
-    ui_manager_.CreateFadingMessage("+" + std::to_string(static_cast<int>(total_quantity)), sf::Vector2f(TileMap::ScreenPosition(index)), sf::Color::White);
+    ui_manager_.CreateFadingMessage("+" + std::to_string(static_cast<int>(total_quantity)), sf::Vector2f(TileMap::ScreenPosition(index)));
 
     stock_manager_.AddStock(type, static_cast<int>(total_quantity));
   }

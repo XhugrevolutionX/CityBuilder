@@ -150,7 +150,7 @@ void UiManager::Update(float dt, sf::RenderWindow& window) {
     fading_messages_.erase(it, fading_messages_.end());
   }
 
-  cursor_indicator_.SetPosition(sf::Vector2f(static_cast<float>(sf::Mouse::getPosition(window).x + 10),static_cast<float>(sf::Mouse::getPosition(window).y + 10)));
+  cursor_indicator_.SetPosition(sf::Vector2f(static_cast<float>(sf::Mouse::getPosition(window).x + 25),static_cast<float>(sf::Mouse::getPosition(window).y + 25)));
 
   give_amount_text_.setString("Give Amount: " + std::to_string(give_amount));
 }
