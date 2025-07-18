@@ -3,6 +3,7 @@
 
 namespace game {
     void Loop();
+    void Restart();
 };
 
 

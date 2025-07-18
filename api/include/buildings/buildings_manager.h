@@ -26,9 +26,10 @@ public:
   void SetupPrices();
   void Add(BuildingsType type, sf::Vector2f position, ai::NpcManager* npcManager, TileMap* tilemap, ResourceManager* resourceManager, resources::StockManager* stock_manager);
   void Update(float dt);
+  void Reset();
   std::pair<int, int> GetPrice(BuildingsType type);
 
-  std::vector<Building>& GetBuildings(){ return buildings_; }
+  std::vector<Building>* GetBuildings(){ return &buildings_; }
 };
 }
 

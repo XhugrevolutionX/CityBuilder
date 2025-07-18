@@ -29,15 +29,28 @@ class StockManager {
 
   StockManager();
 
+  void Reset();
+
   int GetStock(ResourcesType type);
   void AddStock(ResourcesType type, int quantity);
   void RemoveStock(ResourcesType type, int quantity);
+
 
   void Draw(sf::RenderWindow &window) const;
 
 };
 
-inline StockManager::StockManager() : wood_(ResourcesType::kWood, 150), stone_(ResourcesType::kStone, 100), food_(ResourcesType::kFood, 100) {}
+inline StockManager::StockManager()
+    : wood_(ResourcesType::kWood, 150),
+      stone_(ResourcesType::kStone, 100),
+      food_(ResourcesType::kFood, 100),
+      selected_(nullptr) {}
+
+inline void StockManager::Reset() {
+  wood_.RemoveQuantity(wood_.GetQuantity() - 150);
+  stone_.RemoveQuantity(stone_.GetQuantity() - 100);
+  food_.RemoveQuantity(food_.GetQuantity() - 100);
+}
 
 inline void StockManager::SelectStock(ResourcesType type) {
 

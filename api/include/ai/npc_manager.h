@@ -24,6 +24,8 @@ namespace api::ai{
     public:
         void Add(NpcType type, sf::Vector2f start_position, TileMap* tilemap, ResourceManager* ressource_manager, resources::StockManager* stock_manager);
         void Update(float dt);
+        void KillAll() { npcs_.clear(); }
+        std::vector<std::unique_ptr<Npc>>* GetNpcs(){ return &npcs_; }
         void Draw(sf::RenderWindow &window);
 
     };

@@ -48,6 +48,11 @@ void BuildingsManager::Update(float dt) {
     building.Update(dt);
   }
 }
+void BuildingsManager::Reset() {
+
+  buildings_.clear();
+
+}
 std::pair<int, int> BuildingsManager::GetPrice(BuildingsType type) {
   switch (type) {
     case BuildingsType::kLumber:

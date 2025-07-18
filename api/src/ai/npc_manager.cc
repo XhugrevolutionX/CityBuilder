@@ -15,18 +15,22 @@ namespace api::ai {
     CreateNpc(npcs_, type, start_position, tilemap, ressource_manager, stock_manager);
   }
 
-    void NpcManager::Update(float dt){
-    #ifdef TRACY_ENABLE
-      ZoneScoped;
-    #endif //TRACY_ENBALE
-        for (auto& npc : npcs_) {
-            npc->Update(dt);
-        }
-
-        npcs_.erase(std::remove_if(npcs_.begin(), npcs_.end(),[](const std::unique_ptr<Npc>& npc){return npc->is_dead_;}),npcs_.end());
+    void NpcManager::Update(float dt) {
+#ifdef TRACY_ENABLE
+    ZoneScoped;
+#endif  // TRACY_ENBALE
+    for (auto& npc : npcs_) {
+      npc->Update(dt);
     }
 
-    void NpcManager::Draw(sf::RenderWindow &window){
+    npcs_.erase(std::remove_if(npcs_.begin(), npcs_.end(),
+                               [](const std::unique_ptr<Npc>& npc) {
+                                 return npc->is_dead_;
+                               }),
+                npcs_.end());
+  }
+
+  void NpcManager::Draw(sf::RenderWindow &window){
     #ifdef TRACY_ENABLE
         ZoneScoped;
     #endif //TRACY_ENBALE

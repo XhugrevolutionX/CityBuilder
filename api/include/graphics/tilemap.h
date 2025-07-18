@@ -55,6 +55,8 @@ public:
 
 
     void Setup();
+    void Perlin();
+    void Reset();
     void Draw(sf::RenderWindow &window);
     void SetResourcesTile(int, Tile);
     void SetTile(int, Tile);

@@ -27,6 +27,8 @@ ResourceManager resource_manager_;
 api::resources::StockManager stock_manager_;
 api::ui::UiManager ui_manager_;
 
+bool game_over_;
+
 //Events
 void ChopEvent(int index, float total_quantity, float quantity, api::resources::ResourcesType type) {
   // std::cout << "chop event : " << index << "," << quantity << "\n";
@@ -61,6 +63,8 @@ void Setup() {
   ZoneScoped;
 #endif  // TRACY_ENABLE
 
+  game_over_ = false;
+
   //Setup tilemap
   tilemap_ptr_->Setup();
 
@@ -77,12 +81,11 @@ void Setup() {
     window_.create(sf::VideoMode({TileMap::GetSize()}), "SFML window");
   }
 
-
   //Setup prices for the buildings
   buildings_manager_.SetupPrices();
 
   //Setup Ui
-  ui_manager_.Setup(window_, &buildings_manager_, &stock_manager_, tilemap_ptr_.get(), &resource_manager_, ChopEvent);
+  ui_manager_.Setup(window_, &buildings_manager_, &stock_manager_, tilemap_ptr_.get(), &resource_manager_, &npc_manager_,ChopEvent);
 
   //Attach click behavior to the tilemap
   tilemap_ptr_->OnReleasedLeft = []() {
@@ -135,35 +138,55 @@ void Loop() {
         }
 
         bool buttonsWasClicked = false;
-
-        ui_manager_.HandleEvents(event, buttonsWasClicked);
-        tilemap_ptr_->HandleEvent(event, buttonsWasClicked);
+        ui_manager_.HandleEvents(event, buttonsWasClicked, game_over_);
+        if (!game_over_) {
+          tilemap_ptr_->HandleEvent(event, buttonsWasClicked);
+        }
       }
     }
 
-    // GamePlay, physic frame
-    npc_manager_.Update(dt);
-    resource_manager_.Update(dt, GrowEvent);
-    ui_manager_.Update(dt, window_);
+    if (!game_over_) {
+      // GamePlay, physic frame
+      npc_manager_.Update(dt);
+      resource_manager_.Update(dt, GrowEvent);
+    }
 
+    ui_manager_.Update(dt, window_);
 
     // Graphic frame
     window_.clear();
 
     tilemap_ptr_->Draw(window_);
     npc_manager_.Draw(window_);
-    ui_manager_.Draw(window_, stock_manager_);
+    ui_manager_.Draw(window_, stock_manager_, game_over_);
 
     {
-      #ifdef TRACY_ENABLE
-            ZoneNamedN(display_event, "Display Handling", true);
-      #endif  // TRACY_ENABLE
+#ifdef TRACY_ENABLE
+      ZoneNamedN(display_event, "Display Handling", true);
+#endif  // TRACY_ENABLE
       window_.display();
     }
 
-    #ifdef TRACY_ENABLE
-        FrameMark;
-    #endif  // TRACY_ENABLE
+    if (!game_over_ && !buildings_manager_.GetBuildings()->empty() &&
+        npc_manager_.GetNpcs()->empty()) {
+      game_over_ = true;
+    }
+#ifdef TRACY_ENABLE
+    FrameMark;
+#endif  // TRACY_ENABLE
   }
+}
+void Restart() {
+  game_over_ = false;
+
+  tilemap_ptr_->Reset();
+  buildings_manager_.Reset();
+  stock_manager_.Reset();
+
+  resource_manager_.LoadResources(api::resources::ResourcesType::kWood, tilemap_ptr_->GetCollectibles(TileMap::Tile::kTree), ChopEvent);
+  resource_manager_.LoadResources(api::resources::ResourcesType::kFood, tilemap_ptr_->GetCollectibles(TileMap::Tile::kFood), ChopEvent);
+  resource_manager_.LoadResources(api::resources::ResourcesType::kStone, tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
+
+
 }
 }  // namespace game

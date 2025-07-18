@@ -15,79 +15,87 @@
 #include <tracy/Tracy.hpp>
 #endif // TRACY_ENABLE
 
-void TileMap::Setup(){
+void TileMap::Perlin() {
 
-  #ifdef TRACY_ENABLE
-  ZoneScoped;
-  #endif // TRACY_ENABLE
+  noise::module::Perlin perlin;
 
-    textures.Load(files);
+  perlin.SetSeed(150);       // Set seed for reproducibility
+  perlin.SetFrequency(5);    // Controls the "zoom" level
+  perlin.SetPersistence(1);  // Amplitude of successive octaves
+  perlin.SetLacunarity(1);   // Frequency multiplier between octaves
+  perlin.SetOctaveCount(2);  // Number of octaves (layers of detail)
+  perlin.SetNoiseQuality(
+      noise::QUALITY_STD);  // QUALITY_FAST, QUALITY_STD, or QUALITY_BEST
 
-    noise::module::Perlin perlin;
+  for (int i = 0; i < kHeight / kPixelStep; i++) {
+    for (int j = 0; j < kWidth / kPixelStep; j++) {
+      double xi = static_cast<double>(j) / 100;
+      double xj = static_cast<double>(i) / 100;
 
-    perlin.SetSeed(150);             // Set seed for reproducibility
-    perlin.SetFrequency(5);        // Controls the "zoom" level
-    perlin.SetPersistence(1);      // Amplitude of successive octaves
-    perlin.SetLacunarity(1);       // Frequency multiplier between octaves
-    perlin.SetOctaveCount(2);        // Number of octaves (layers of detail)
-    perlin.SetNoiseQuality(noise::QUALITY_STD); // QUALITY_FAST, QUALITY_STD, or QUALITY_BEST
+      double raw = perlin.GetValue(xi, xj, 0.0);
+      double value = (raw + 1.0) / 2.0;
 
-    for (int i = 0; i < kHeight/kPixelStep; i++) {
-      for (int j = 0; j < kWidth/kPixelStep; j++) {
+      int idx = (j) + ((i)*kWidth / kPixelStep);
+      if (value < perlinThreshold) {
+        tiles_[idx] = Tile::kGrass;
 
-        double xi = static_cast<double>(j) / 100;
-        double xj = static_cast<double>(i) / 100;
-
-        double raw = perlin.GetValue(xi, xj, 0.0);
-        double value = (raw + 1.0) / 2.0;
-
-        int idx = (j) + ((i) * kWidth/kPixelStep);
-        if (value < perlinThreshold) {
-          tiles_[idx] = Tile::kGrass;
-
-          walkables_.push_back(ScreenPosition(idx));
-        }
-        else {
-          tiles_[idx] = Tile::kWater;
-        }
+        walkables_.push_back(ScreenPosition(idx));
+      } else {
+        tiles_[idx] = Tile::kWater;
       }
     }
+  }
 
-   perlin.SetSeed(50);             // Set seed for reproducibility
-   perlin.SetFrequency(5);        // Controls the "zoom" level
-   perlin.SetPersistence(0.3);      // Amplitude of successive octaves
-   perlin.SetLacunarity(2);       // Frequency multiplier between octaves
-   perlin.SetOctaveCount(3);        // Number of octaves (layers of detail)
-   perlin.SetNoiseQuality(noise::QUALITY_STD); // QUALITY_FAST, QUALITY_STD, or QUALITY_BEST
+  perlin.SetSeed(50);          // Set seed for reproducibility
+  perlin.SetFrequency(5);      // Controls the "zoom" level
+  perlin.SetPersistence(0.3);  // Amplitude of successive octaves
+  perlin.SetLacunarity(2);     // Frequency multiplier between octaves
+  perlin.SetOctaveCount(3);    // Number of octaves (layers of detail)
+  perlin.SetNoiseQuality(
+      noise::QUALITY_STD);  // QUALITY_FAST, QUALITY_STD, or QUALITY_BEST
 
-    for (auto element : walkables_) {
+  for (auto element : walkables_) {
+    int i = static_cast<int>(element.x) / kPixelStep;
+    int j =static_cast<int>(element.y) / kPixelStep;
 
-       int i = element.x / kPixelStep;
-       int j = element.y / kPixelStep;
+    double xi = static_cast<double>(i) / 100;
+    double xj = static_cast<double>(j) / 100;
 
-       double xi = static_cast<double>(i) / 100;
-       double xj = static_cast<double>(j) / 100;
+    double raw = perlin.GetValue(xi, xj, 0.0);
+    double value = (raw + 1.0) / 2.0;
 
-       double raw = perlin.GetValue(xi, xj, 0.0);
-       double value = (raw + 1.0) / 2.0;
+    int idx = (i) + ((j)*kWidth / kPixelStep);
 
-       int idx = (i) + ((j) * kWidth/kPixelStep);
-
-       if (value < perlinThreshold / 1.5) {
-         ressources_[idx] = Tile::kRock;
-       }
-       else if (value < perlinThreshold / 1.25) {
-         ressources_[idx] = Tile::kTree;
-       }
-       else if (value < perlinThreshold) {
-         ressources_[idx] = Tile::kFood;
-       }
-       else {
-         ressources_[idx] = Tile::kEmpty;
-       }
+    if (value < perlinThreshold / 1.5) {
+      ressources_[idx] = Tile::kRock;
+    } else if (value < perlinThreshold / 1.25) {
+      ressources_[idx] = Tile::kTree;
+    } else if (value < perlinThreshold) {
+      ressources_[idx] = Tile::kFood;
+    } else {
+      ressources_[idx] = Tile::kEmpty;
     }
+  }
+}
+
+void TileMap::Setup() {
+#ifdef TRACY_ENABLE
+  ZoneScoped;
+#endif  // TRACY_ENABLE
+
+  textures.Load(files);
+
+  Perlin();
 
   SetZone(sf::IntRect({0, 0}, sf::Vector2i(kWidth, kHeight)));
+}
+
+void TileMap::Reset() {
+  for (auto &tile : buildings_) {
+    tile = Tile::kEmpty;
+  }
+
+  Perlin();
 }
 
 void TileMap::Draw(sf::RenderWindow &window) {
